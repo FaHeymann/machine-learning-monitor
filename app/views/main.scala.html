@@ -1,0 +1,16 @@
+@(title: String)(content: Html)
+
+<!DOCTYPE html>
+
+<html lang="en">
+    <head>
+        <title>@title</title>
+        @includes.assets()
+    </head>
+    <body>
+        <div class="container-fluid">
+            @includes.navigation()
+            @content
+        </div>
+    </body>
+</html>

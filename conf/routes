@@ -1,0 +1,13 @@
+# Session
+GET     /login                         controllers.SessionController.login()
+POST    /login                         controllers.SessionController.authenticate()
+GET     /logout                        controllers.SessionController.logout()
+
+# Features
+GET     /features                      controllers.FeatureController.list()
+GET     /features/create               controllers.FeatureController.create()
+GET     /features/:featureSetId        controllers.FeatureController.detail(featureSetId: Integer)
+POST    /features/create               controllers.FeatureController.save()
+
+# Map static resources from the /public folder to the /assets URL path
+GET     /assets/*file                  controllers.Assets.at(path="/public", file)
