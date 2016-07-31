@@ -16,5 +16,8 @@ libraryDependencies ++= Seq(
 
   //assets
   "org.webjars" % "bootstrap" % "3.1.1-2",
-  "org.webjars" % "font-awesome" % "4.6.1"
+  "org.webjars" % "font-awesome" % "4.6.1",
+  "org.webjars" % "angularjs" % "1.5.0",
+  "org.webjars" % "angular-chart.js" % "0.8.8",
+  "org.webjars" % "angular-ui-bootstrap" % "1.2.1"
 )

@@ -9,5 +9,11 @@ GET     /features/create               controllers.FeatureController.create()
 GET     /features/:featureSetId        controllers.FeatureController.detail(featureSetId: Integer)
 POST    /features/create               controllers.FeatureController.save()
 
+#Algorithms
+GET     /algorithms                    controllers.AlgorithmController.list()
+GET     /algorithms/create             controllers.AlgorithmController.create()
+GET     /algorithms/:algorithmId       controllers.AlgorithmController.detail(algorithmId: Integer)
+POST    /algorithms/create             controllers.AlgorithmController.save()
+
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file                  controllers.Assets.at(path="/public", file)

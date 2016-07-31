@@ -11,7 +11,7 @@ import java.util.List;
 public class Feature extends Model {
 
     @Id
-    @GeneratedValue(strategy= GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     @NotNull
@@ -47,7 +47,7 @@ public class Feature extends Model {
     }
 
     public List<String> getData() {
-        return data;
+        return Arrays.asList(serializedData.split(";;;"));
     }
 
     public void setData(List<String> data) {

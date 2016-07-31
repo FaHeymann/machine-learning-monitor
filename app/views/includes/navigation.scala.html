@@ -1,3 +1,5 @@
+@(hideNavigation: Boolean = false)
+
 <nav class="navbar navbar-default">
     <div class="container-fluid">
         <div class="navbar-header">
@@ -9,19 +11,28 @@
             </button>
             <a class="navbar-brand" href="#">Machine Learning Monitor</a>
         </div>
-        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-            <ul class="nav navbar-nav">
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Feature Sets</a>
-                    <ul class="dropdown-menu">
-                        <li><a href="@routes.FeatureController.list()">All</a></li>
-                        <li><a href="@routes.FeatureController.create()">New</a></li>
-                    </ul>
-                </li>
-            </ul>
-            <ul class="nav navbar-nav navbar-right">
-                <li><a href="@routes.SessionController.logout()">Logout</a></li>
-            </ul>
-        </div>
+        @if(!hideNavigation) {
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav">
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Feature Sets</a>
+                        <ul class="dropdown-menu">
+                            <li><a href="@routes.FeatureController.list()">All</a></li>
+                            <li><a href="@routes.FeatureController.create()">New</a></li>
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Algorithms</a>
+                        <ul class="dropdown-menu">
+                            <li><a href="@routes.AlgorithmController.list()">All</a></li>
+                            <li><a href="@routes.AlgorithmController.create()">New</a></li>
+                        </ul>
+                    </li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a href="@routes.SessionController.logout()">Logout</a></li>
+                </ul>
+            </div>
+        }
     </div>
 </nav>

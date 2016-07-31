@@ -1,4 +1,4 @@
-@(title: String)(content: Html)
+@(title: String, hideNavigation: Boolean = false)(content: Html)
 
 <!DOCTYPE html>
 
@@ -9,7 +9,7 @@
     </head>
     <body>
         <div class="container-fluid">
-            @includes.navigation()
+            @includes.navigation(hideNavigation)
             @content
         </div>
     </body>

@@ -62,7 +62,6 @@ public class DataFileParser {
                 this.features.add(feature);
             }
 
-
         } catch (FileNotFoundException e) {
             this.error = "File not found";
         } catch (IOException e) {

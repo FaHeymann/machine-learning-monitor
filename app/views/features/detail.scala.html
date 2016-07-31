@@ -2,7 +2,28 @@
 
 @main(featureSet.getName()) {
 
-<h2>@featureSet.getName()</h2>
-<p>@featureSet.getDescription()</p>
+    <h2>@featureSet.getName()</h2>
+    <p>@featureSet.getDescription()</p>
+
+    <table class="table table-hover table-condensed table-striped">
+        <thead>
+            <tr>
+                @for(label <- featureSet.getLabels()) {
+                    <th>@label</th>
+                }
+                <th>Result</th>
+            </tr>
+        </thead>
+        <tbody>
+            @for(feature <- featureSet.getFeatures()) {
+                <tr>
+                    @for(entry <- feature.getData()) {
+                        <td>@entry</td>
+                    }
+                    <td>@feature.getResult()</td>
+                </tr>
+            }
+        </tbody>
+    </table>
 
 }

@@ -26,6 +26,7 @@ create table feature_set (
   description                   varchar(255) not null,
   column_amount                 integer not null,
   serialized_labels             varchar(255) not null,
+  user_id                       integer,
   constraint pk_feature_set primary key (id)
 );
 
@@ -56,6 +57,9 @@ create table user (
 alter table feature add constraint fk_feature_feature_set_id foreign key (feature_set_id) references feature_set (id) on delete restrict on update restrict;
 create index ix_feature_feature_set_id on feature (feature_set_id);
 
+alter table feature_set add constraint fk_feature_set_user_id foreign key (user_id) references user (id) on delete restrict on update restrict;
+create index ix_feature_set_user_id on feature_set (user_id);
+
 alter table result add constraint fk_result_result_set_id foreign key (result_set_id) references result_set (id) on delete restrict on update restrict;
 create index ix_result_result_set_id on result (result_set_id);
 
@@ -70,6 +74,9 @@ create index ix_result_set_algorithm_id on result_set (algorithm_id);
 
 alter table feature drop foreign key fk_feature_feature_set_id;
 drop index ix_feature_feature_set_id on feature;
+
+alter table feature_set drop foreign key fk_feature_set_user_id;
+drop index ix_feature_set_user_id on feature_set;
 
 alter table result drop foreign key fk_result_result_set_id;
 drop index ix_result_result_set_id on result;

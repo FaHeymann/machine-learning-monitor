@@ -11,7 +11,7 @@ import java.util.List;
 public class FeatureSet extends Model {
 
     @Id
-    @GeneratedValue(strategy= GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     @NotNull
@@ -34,6 +34,9 @@ public class FeatureSet extends Model {
 
     @OneToMany
     private List<ResultSet> resultSets;
+
+    @ManyToOne
+    private User user;
 
     public int getId() {
         return id;
@@ -68,7 +71,7 @@ public class FeatureSet extends Model {
     }
 
     public List<String> getLabels() {
-        return labels;
+        return Arrays.asList(serializedLabels.split(";;;"));
     }
 
     public void setLabels(List<String> labels) {
@@ -99,6 +102,14 @@ public class FeatureSet extends Model {
 
     public void setResultSets(List<ResultSet> resultSets) {
         this.resultSets = resultSets;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public static Model.Finder<Integer, FeatureSet> find = new Model.Finder<>(FeatureSet.class);

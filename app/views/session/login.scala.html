@@ -1,6 +1,6 @@
 @(form: Form[SessionController.Login])
 
-@main("Login") {
+@main("Login", true) {
     @helper.form(routes.SessionController.authenticate, 'class -> "form-horizontal") {
         <div class="row">
             <div class="col-sm-4 col-sm-offset-4">

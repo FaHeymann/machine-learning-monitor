@@ -7,15 +7,16 @@ import com.avaje.ebean.Model;
 import helpers.PasswordHelper;
 
 import java.security.NoSuchAlgorithmException;
+import java.util.List;
 
 @Entity
 public class User extends Model {
 
     @Id
-    @GeneratedValue(strategy=GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(unique=true)
+    @Column(unique = true)
     @NotNull
     private String email;
 
@@ -24,6 +25,9 @@ public class User extends Model {
 
     @NotNull
     private String password;
+
+    @OneToMany
+    private List<FeatureSet> featureSets;
 
     public User(String email, String name, String password) {
         this.email = email;
@@ -67,9 +71,17 @@ public class User extends Model {
         }
     }
 
+    public List<FeatureSet> getFeatureSets() {
+        return featureSets;
+    }
+
+    public void setFeatureSets(List<FeatureSet> featureSets) {
+        this.featureSets = featureSets;
+    }
+
     public static User authenticate(String email, String password) {
         User user = find.where().eq("email", email).findUnique();
-        return PasswordHelper.checkPassword(password, user.password) ? user : null;
+        return user != null && PasswordHelper.checkPassword(password, user.password) ? user : null;
     }
 
     public static Finder<Integer, User> find = new Finder<>(User.class);
