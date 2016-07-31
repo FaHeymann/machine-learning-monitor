@@ -21,7 +21,7 @@ public class ResultSet extends Model {
     @NotNull
     private Algorithm algorithm;
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
     private List<Result> results;
 
     public int getId() {
@@ -46,6 +46,14 @@ public class ResultSet extends Model {
 
     public void setAlgorithm(Algorithm algorithm) {
         this.algorithm = algorithm;
+    }
+
+    public List<Result> getResults() {
+        return results;
+    }
+
+    public void setResults(List<Result> results) {
+        this.results = results;
     }
 
     public static Model.Finder<Integer, ResultSet> find = new Model.Finder<>(ResultSet.class);

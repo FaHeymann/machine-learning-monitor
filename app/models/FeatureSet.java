@@ -29,7 +29,7 @@ public class FeatureSet extends Model {
     @NotNull
     private String serializedLabels;
 
-    @OneToMany(cascade=CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL)
     private List<Feature> features;
 
     @OneToMany
