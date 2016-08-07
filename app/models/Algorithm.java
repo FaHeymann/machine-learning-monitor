@@ -1,13 +1,14 @@
 package models;
 
 import com.avaje.ebean.Model;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @Entity
-public class Algorithm extends Model {
+public class Algorithm extends TimestampedModel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,6 +24,7 @@ public class Algorithm extends Model {
     private String endpoint;
 
     @OneToMany
+    @JsonManagedReference
     private List<ResultSet> resultSets;
 
     public int getId() {

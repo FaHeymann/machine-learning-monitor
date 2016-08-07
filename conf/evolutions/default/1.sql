@@ -8,6 +8,8 @@ create table algorithm (
   name                          varchar(255) not null,
   description                   varchar(255) not null,
   endpoint                      varchar(255) not null,
+  created_at                    datetime(6) not null,
+  updated_at                    datetime(6) not null,
   constraint pk_algorithm primary key (id)
 );
 
@@ -17,6 +19,8 @@ create table feature (
   serialized_data               varchar(255) not null,
   result                        double not null,
   feature_set_id                integer not null,
+  created_at                    datetime(6) not null,
+  updated_at                    datetime(6) not null,
   constraint pk_feature primary key (id)
 );
 
@@ -27,6 +31,8 @@ create table feature_set (
   column_amount                 integer not null,
   serialized_labels             varchar(255) not null,
   user_id                       integer,
+  created_at                    datetime(6) not null,
+  updated_at                    datetime(6) not null,
   constraint pk_feature_set primary key (id)
 );
 
@@ -35,6 +41,8 @@ create table result (
   expected                      double not null,
   actual                        double not null,
   result_set_id                 integer not null,
+  created_at                    datetime(6) not null,
+  updated_at                    datetime(6) not null,
   constraint pk_result primary key (id)
 );
 
@@ -42,6 +50,8 @@ create table result_set (
   id                            integer auto_increment not null,
   feature_set_id                integer not null,
   algorithm_id                  integer not null,
+  created_at                    datetime(6) not null,
+  updated_at                    datetime(6) not null,
   constraint pk_result_set primary key (id)
 );
 
@@ -50,6 +60,8 @@ create table user (
   email                         varchar(255) not null,
   name                          varchar(255) not null,
   password                      varchar(255) not null,
+  created_at                    datetime(6) not null,
+  updated_at                    datetime(6) not null,
   constraint uq_user_email unique (email),
   constraint pk_user primary key (id)
 );

@@ -1,6 +1,7 @@
 package models;
 
 import com.avaje.ebean.Model;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -8,7 +9,7 @@ import java.util.Arrays;
 import java.util.List;
 
 @Entity
-public class Feature extends Model {
+public class Feature extends TimestampedModel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,6 +29,7 @@ public class Feature extends Model {
 
     @ManyToOne
     @NotNull
+    @JsonBackReference
     private FeatureSet featureSet;
 
     public int getId() {

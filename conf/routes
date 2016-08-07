@@ -19,6 +19,10 @@ POST    /algorithms/create             controllers.AlgorithmController.save()
 GET     /tests/run                     controllers.TestController.create()
 POST    /tests/run                     controllers.TestController.run()
 
+# Results
+GET     /results                       controllers.ResultController.index()
+GET     /results/search/:featureSetId/:algorithmId controllers.ResultController.search(featureSetId: Integer, algorithmId: Integer)
+
 # temp
 POST    /tests/answer                  controllers.TestController.testAnswer()
 

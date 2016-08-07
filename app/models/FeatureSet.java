@@ -1,6 +1,7 @@
 package models;
 
 import com.avaje.ebean.Model;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -8,7 +9,7 @@ import java.util.Arrays;
 import java.util.List;
 
 @Entity
-public class FeatureSet extends Model {
+public class FeatureSet extends TimestampedModel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,9 +31,11 @@ public class FeatureSet extends Model {
     private String serializedLabels;
 
     @OneToMany(cascade = CascadeType.ALL)
+    @JsonManagedReference
     private List<Feature> features;
 
     @OneToMany
+    @JsonManagedReference
     private List<ResultSet> resultSets;
 
     @ManyToOne

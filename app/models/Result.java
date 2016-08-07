@@ -1,12 +1,13 @@
 package models;
 
 import com.avaje.ebean.Model;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
 @Entity
-public class Result extends Model {
+public class Result extends TimestampedModel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,6 +21,7 @@ public class Result extends Model {
 
     @ManyToOne
     @NotNull
+    @JsonBackReference
     private ResultSet resultSet;
 
     public int getId() {

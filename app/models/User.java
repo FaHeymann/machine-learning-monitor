@@ -10,7 +10,7 @@ import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
 @Entity
-public class User extends Model {
+public class User extends TimestampedModel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
