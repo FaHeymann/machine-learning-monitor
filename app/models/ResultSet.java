@@ -105,7 +105,5 @@ public class ResultSet extends TimestampedModel {
             .reduce((a, b) -> b).getAsDouble();
     }
 
-
-
     public static Model.Finder<Integer, ResultSet> find = new Model.Finder<>(ResultSet.class);
 }

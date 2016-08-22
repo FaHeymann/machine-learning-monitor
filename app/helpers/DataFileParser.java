@@ -32,14 +32,13 @@ public class DataFileParser {
         try {
             BufferedReader br = new BufferedReader(new FileReader(this.dataFile.getFile()));
             String line = br.readLine();
-            String[] split;
 
             if (line == null) {
                 this.error = "The file is empty";
                 return;
             }
 
-            split = line.split(",");
+            String[] split = line.split(",");
             this.labels = Arrays.copyOf(split, split.length - 1);
             this.columnAmount = split.length - 1;
 
@@ -61,7 +60,6 @@ public class DataFileParser {
                 }
                 this.features.add(feature);
             }
-
         } catch (FileNotFoundException e) {
             this.error = "File not found";
         } catch (IOException e) {

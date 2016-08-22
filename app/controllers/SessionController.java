@@ -16,7 +16,7 @@ public class SessionController extends Controller {
     FormFactory formFactory;
 
     public Result login() {
-        return ok(login.render(form(Login.class)));
+        return ok(login.render(formFactory.form(Login.class)));
     }
 
     public Result authenticate() {

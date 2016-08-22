@@ -1,0 +1,51 @@
+@(resultSet: ResultSet)
+
+@formatter = @{
+    new java.text.DecimalFormat("#.##")
+}
+
+@getColor(value: Double, resultSet: ResultSet) = @{
+    if(value > resultSet.get75Quantile) {
+        "danger"
+    } else if(value > resultSet.get50Quantile) {
+        "warning"
+    } else if(value > resultSet.get25Quantile) {
+        "info"
+    } else {
+        "success"
+    }
+}
+
+@main("Result Details") {
+    <h2>Result Details @resultSet.getCreatedAt().format("YYYY-MM-dd kk:mm:ss")</h2>
+    <p>Algorithm: <a href="/algorithms/@resultSet.getAlgorithm().getId()">@resultSet.getAlgorithm().getName()</a></p>
+    <p>Feature Set: <a href="/features/@resultSet.getFeatureSet().getId()">@resultSet.getFeatureSet().getName()</a></p>
+    <h3>Metrics:</h3>
+    <p>Maximum Deviation: @formatter.format(resultSet.getMaxDeviation())</p>
+    <p>Maximum Positive Deviation: @formatter.format(resultSet.getMaxPositiveDeviation())</p>
+    <p>Maximum Negative Deviation: @formatter.format(resultSet.getMaxNegativeDeviation())</p>
+    <p>Q(25): @formatter.format(resultSet.get25Quantile())</p>
+    <p>Q(50): @formatter.format(resultSet.get50Quantile())</p>
+    <p>Q(75): @formatter.format(resultSet.get75Quantile())</p>
+    <p>Q(90): @formatter.format(resultSet.get90Quantile())</p>
+    <p>Q(99): @formatter.format(resultSet.get99Quantile())</p>
+    <table class="table table-hover table-condensed table-striped">
+        <thead>
+            <tr>
+                <th>Expected</th>
+                <th>Actual</th>
+                <th>Difference</th>
+            </tr>
+        </thead>
+        <tbody>
+            @for(result <- resultSet.getResults()) {
+                <tr class="@getColor(java.lang.Math.abs(result.getActual() - result.getExpected()), resultSet)">
+                    <td>@formatter.format(result.getExpected())</td>
+                    <td>@formatter.format(result.getActual())</td>
+                    <td>@formatter.format(java.lang.Math.abs(result.getActual() - result.getExpected()))</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+}

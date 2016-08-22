@@ -30,4 +30,10 @@ public class ResultController extends Controller {
         ).findList();
         return ok(Json.toJson(resultSets));
     }
+
+    @Security.Authenticated(Secured.class)
+    public Result detail(int resultSetId) {
+        ResultSet resultSet = ResultSet.find.byId(resultSetId);
+        return ok(detail.render(resultSet));
+    }
 }

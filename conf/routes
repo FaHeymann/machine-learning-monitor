@@ -3,6 +3,9 @@ GET     /login                         controllers.SessionController.login()
 POST    /login                         controllers.SessionController.authenticate()
 GET     /logout                        controllers.SessionController.logout()
 
+# Index
+GET     /                              controllers.IndexController.index()
+
 # Features
 GET     /features                      controllers.FeatureController.list()
 GET     /features/create               controllers.FeatureController.create()
@@ -22,6 +25,7 @@ POST    /tests/run                     controllers.TestController.run()
 # Results
 GET     /results                       controllers.ResultController.index()
 GET     /results/search/:featureSetId/:algorithmId controllers.ResultController.search(featureSetId: Integer, algorithmId: Integer)
+GET     /results/:resultSetId          controllers.ResultController.detail(resultSetId: Integer)
 
 # temp
 POST    /tests/answer                  controllers.TestController.testAnswer()

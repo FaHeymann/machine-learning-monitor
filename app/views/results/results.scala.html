@@ -5,7 +5,7 @@
         <form class="form-inline">
             <div class="form-group">
                 <label for="featureSet">Feature Set</label>
-                <select class="form-control" id="featureSet" data-ng-model="ctrl.featureSetId">
+                <select class="form-control" id="featureSet" data-ng-model="ctrl.featureSetId" data-ng-change="ctrl.fetch()">
                     @for(featureSet <- featureSets) {
                         <option value="@featureSet.getId()">@featureSet.getName()</option>
                     }
@@ -13,7 +13,7 @@
             </div>
             <div class="form-group">
                 <label for="algorithm">Algorithm</label>
-                <select class="form-control" id="algorithm" data-ng-model="ctrl.algorithmId">
+                <select class="form-control" id="algorithm" data-ng-model="ctrl.algorithmId" data-ng-change="ctrl.fetch()">
                     @for(algorithm <- algorithms) {
                         <option value="@algorithm.getId()">@algorithm.getName()</option>
                     }
@@ -40,6 +40,7 @@
             data-chart-labels="ctrl.chartLabels"
             data-chart-series="ctrl.chartSeries"
             data-chart-options="ctrl.chartOptions"
+            data-chart-click="ctrl.handleClick"
         ></canvas>
     </div>
 }
