@@ -64,13 +64,13 @@ public class ResultSet extends TimestampedModel {
     public double getMaxPositiveDeviation() {
         return this.getResults().stream()
             .mapToDouble(r -> r.getActual() - r.getExpected())
-            .max().getAsDouble();
+            .max().orElse(0);
     }
 
     public double getMaxNegativeDeviation() {
         return this.getResults().stream()
             .mapToDouble(r -> r.getExpected() - r.getActual())
-            .max().getAsDouble();
+            .max().orElse(0);
     }
 
     public double getMaxDeviation() {
@@ -102,7 +102,7 @@ public class ResultSet extends TimestampedModel {
             .mapToDouble(r -> Math.abs(r.getActual() - r.getExpected()))
             .sorted()
             .limit(Math .round(Math.ceil(p * this.getResults().size())))
-            .reduce((a, b) -> b).getAsDouble();
+            .reduce((a, b) -> b).orElse(0);
     }
 
     public static Model.Finder<Integer, ResultSet> find = new Model.Finder<>(ResultSet.class);

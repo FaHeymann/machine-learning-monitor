@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.util.Arrays;
 import java.util.List;
 
 @Entity
@@ -91,14 +92,12 @@ public class Parameter extends Model {
         }
 
         public static Type fromString(String text) {
-            if (text != null) {
-                for (Type type : Type.values()) {
-                    if (text.equalsIgnoreCase(type.type)) {
-                        return type;
-                    }
-                }
-            }
-            return null;
+            return text == null
+                ? null
+                : Arrays.stream(Type.values())
+                    .filter(t -> t.getType().equalsIgnoreCase(text))
+                    .findFirst()
+                    .orElseGet(null);
         }
     }
 
