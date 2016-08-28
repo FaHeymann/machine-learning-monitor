@@ -27,6 +27,10 @@ public class Algorithm extends TimestampedModel {
     @JsonManagedReference
     private List<ResultSet> resultSets;
 
+    @OneToMany(cascade = CascadeType.ALL)
+    @JsonManagedReference
+    private List<Parameter> parameters;
+
     public int getId() {
         return id;
     }
@@ -65,6 +69,14 @@ public class Algorithm extends TimestampedModel {
 
     public void setResultSets(List<ResultSet> resultSets) {
         this.resultSets = resultSets;
+    }
+
+    public List<Parameter> getParameters() {
+        return parameters;
+    }
+
+    public void setParameters(List<Parameter> parameters) {
+        this.parameters = parameters;
     }
 
     public static Model.Finder<Integer, Algorithm> find = new Model.Finder<>(Algorithm.class);

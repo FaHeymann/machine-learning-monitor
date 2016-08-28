@@ -36,6 +36,22 @@ create table feature_set (
   constraint pk_feature_set primary key (id)
 );
 
+create table parameter (
+  id                            integer auto_increment not null,
+  name                          varchar(255) not null,
+  type                          integer not null,
+  algorithm_id                  integer not null,
+  constraint ck_parameter_type check (type in (0,1,2,3)),
+  constraint pk_parameter primary key (id)
+);
+
+create table parameter_enum_value (
+  id                            integer auto_increment not null,
+  value                         varchar(255) not null,
+  parameter_id                  integer not null,
+  constraint pk_parameter_enum_value primary key (id)
+);
+
 create table result (
   id                            integer auto_increment not null,
   expected                      double not null,
@@ -72,6 +88,12 @@ create index ix_feature_feature_set_id on feature (feature_set_id);
 alter table feature_set add constraint fk_feature_set_user_id foreign key (user_id) references user (id) on delete restrict on update restrict;
 create index ix_feature_set_user_id on feature_set (user_id);
 
+alter table parameter add constraint fk_parameter_algorithm_id foreign key (algorithm_id) references algorithm (id) on delete restrict on update restrict;
+create index ix_parameter_algorithm_id on parameter (algorithm_id);
+
+alter table parameter_enum_value add constraint fk_parameter_enum_value_parameter_id foreign key (parameter_id) references parameter (id) on delete restrict on update restrict;
+create index ix_parameter_enum_value_parameter_id on parameter_enum_value (parameter_id);
+
 alter table result add constraint fk_result_result_set_id foreign key (result_set_id) references result_set (id) on delete restrict on update restrict;
 create index ix_result_result_set_id on result (result_set_id);
 
@@ -90,6 +112,12 @@ drop index ix_feature_feature_set_id on feature;
 alter table feature_set drop foreign key fk_feature_set_user_id;
 drop index ix_feature_set_user_id on feature_set;
 
+alter table parameter drop foreign key fk_parameter_algorithm_id;
+drop index ix_parameter_algorithm_id on parameter;
+
+alter table parameter_enum_value drop foreign key fk_parameter_enum_value_parameter_id;
+drop index ix_parameter_enum_value_parameter_id on parameter_enum_value;
+
 alter table result drop foreign key fk_result_result_set_id;
 drop index ix_result_result_set_id on result;
 
@@ -104,6 +132,10 @@ drop table if exists algorithm;
 drop table if exists feature;
 
 drop table if exists feature_set;
+
+drop table if exists parameter;
+
+drop table if exists parameter_enum_value;
 
 drop table if exists result;
 

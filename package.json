@@ -1,0 +1,29 @@
+{
+  "name": "machine-learning-monitor",
+  "version": "0.0.1",
+  "description": "Development support for machine learning projects",
+  "main": "app/assets/javascripts/main.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/FaHeymann/machine-learning-monitor.git"
+  },
+  "author": "Fabian Heymann",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/FaHeymann/machine-learning-monitor/issues"
+  },
+  "homepage": "https://github.com/FaHeymann/machine-learning-monitor#readme",
+  "dependencies": {
+    "eslint": "^3.4.0",
+    "eslint-config-airbnb": "^10.0.1",
+    "eslint-plugin-import": "^1.14.0",
+    "eslint-plugin-jsx-a11y": "^2.2.0",
+    "eslint-plugin-react": "^6.1.2"
+  }
+}

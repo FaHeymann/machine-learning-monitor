@@ -25,8 +25,8 @@ public class ResultController extends Controller {
     @Security.Authenticated(Secured.class)
     public Result search(int featureSetId, int algorithmId) {
         List<ResultSet> resultSets = ResultSet.find.where().and(
-                Expr.eq("feature_set_id", featureSetId),
-                Expr.eq("algorithm_id", algorithmId)
+            Expr.eq("feature_set_id", featureSetId),
+            Expr.eq("algorithm_id", algorithmId)
         ).findList();
         return ok(Json.toJson(resultSets));
     }

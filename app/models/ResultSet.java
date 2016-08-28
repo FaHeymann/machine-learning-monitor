@@ -101,7 +101,7 @@ public class ResultSet extends TimestampedModel {
         return this.getResults().stream()
             .mapToDouble(r -> Math.abs(r.getActual() - r.getExpected()))
             .sorted()
-            .limit(Math.round(Math.ceil(p * this.getResults().size())))
+            .limit(Math .round(Math.ceil(p * this.getResults().size())))
             .reduce((a, b) -> b).getAsDouble();
     }
 

@@ -27,10 +27,10 @@ import java.util.concurrent.ThreadLocalRandom;
 public class TestController extends Controller {
 
     @Inject
-    FormFactory formFactory;
+    private FormFactory formFactory;
 
     @Inject
-    WSClient ws;
+    private WSClient ws;
 
     @Security.Authenticated(Secured.class)
     public Result create() {

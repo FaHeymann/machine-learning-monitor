@@ -18,7 +18,7 @@ import java.util.List;
 public class FeatureController extends Controller {
 
     @Inject
-    FormFactory formFactory;
+    private FormFactory formFactory;
 
     @Security.Authenticated(Secured.class)
     public Result list() {

@@ -5,3 +5,4 @@ target
 logs
 data
 conf/dev.properties
+node_modules

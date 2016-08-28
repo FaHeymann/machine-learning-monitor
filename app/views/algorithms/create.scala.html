@@ -1,45 +1,4 @@
-@(form: Form[AlgorithmController.AlgorithmData])
-
-@main("Create Feature Set") {
-    @helper.form(routes.AlgorithmController.save(), 'class -> "form-horizontal") {
-        <div class="row">
-            <div class="col-sm-6">
-                <div class="form-group">
-                    <div class="col-sm-10 col-sm-offset-2">
-                        <h3>New Algorithm</h3>
-
-                        @if(form.hasGlobalErrors) {
-                            <p class="error">
-                                @form.globalError.message
-                            </p>
-                        }
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label for="name" class="col-sm-2 control-label">Name</label>
-                    <div class="col-sm-10">
-                        <input id="name" type="text" class="form-control" name="name" placeholder="Name" value='@form("name").value' />
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="description" class="col-sm-2 control-label">Description</label>
-                    <div class="col-sm-10">
-                        <textarea id="description" class="form-control" rows="3" name="description" placeholder="Description">@form("description").value</textarea>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="endpoint" class="col-sm-2 control-label">Endpoint</label>
-                    <div class="col-sm-10">
-                        <input id="endpoint" type="text" class="form-control" name="endpoint" placeholder="Endpoint" value='@form("endpoint").value' />
-                    </div>
-                </div>
-                <div class="form-group">
-                    <div class="col-sm-10 col-sm-offset-2">
-                        <button class="btn btn-primary" type="submit">Save Algorithm</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    }
+@main("Create Algorithm") {
+  <h3>New Algorithm</h3>
+  <data-create-algorithm></data-create-algorithm>
 }

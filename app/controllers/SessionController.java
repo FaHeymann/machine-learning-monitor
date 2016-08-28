@@ -8,12 +8,10 @@ import play.mvc.Controller;
 import play.mvc.Result;
 import views.html.session.login;
 
-import static play.data.Form.form;
-
 public class SessionController extends Controller {
 
     @Inject
-    FormFactory formFactory;
+    private FormFactory formFactory;
 
     public Result login() {
         return ok(login.render(formFactory.form(Login.class)));

@@ -22,14 +22,14 @@
             <div class="form-group">
                 <label for="metric">Metric</label>
                 <select class="form-control" id="metric" data-ng-model="ctrl.metric" data-ng-change="ctrl.update()">
-                    <option value="0">Maximum Deviation</option>
-                    <option value="1">Maximum Positive Deviation</option>
-                    <option value="2">Maximum Negative Deviation</option>
-                    <option value="3">Q(0.25)</option>
-                    <option value="4">Q(0.50)</option>
-                    <option value="5">Q(0.75)</option>
-                    <option value="6">Q(0.90)</option>
-                    <option value="7">Q(0.99)</option>
+                    <option value="maxDeviation">Maximum Deviation</option>
+                    <option value="maxPositiveDeviation">Maximum Positive Deviation</option>
+                    <option value="maxNegativeDeviation">Maximum Negative Deviation</option>
+                    <option value="25Quantile">Q(0.25)</option>
+                    <option value="50Quantile">Q(0.50)</option>
+                    <option value="75Quantile">Q(0.75)</option>
+                    <option value="90Quantile">Q(0.90)</option>
+                    <option value="99Quantile">Q(0.99)</option>
                 </select>
             </div>
         </form>

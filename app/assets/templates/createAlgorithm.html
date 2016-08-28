@@ -1,0 +1,81 @@
+<p class="text-danger" data-ng-hide="$ctrl.error == ''">{{ $ctrl.error }}</p>
+<div class="row">
+  <div class="col-sm-6">
+    <form class="form-horizontal">
+      <div class="form-group">
+        <label for="name" class="col-sm-3 control-label">Name</label>
+        <div class="col-sm-9">
+          <input id="name" type="text" class="form-control" placeholder="Name" data-ng-model="$ctrl.name" />
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="description" class="col-sm-3 control-label">Description</label>
+        <div class="col-sm-9">
+          <textarea id="description" class="form-control" rows="3" placeholder="Description" data-ng-model="$ctrl.description"></textarea>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="endpoint" class="col-sm-3 control-label">Endpoint</label>
+        <div class="col-sm-9">
+          <input id="endpoint" type="text" class="form-control" placeholder="Endpoint" data-ng-model="$ctrl.endpoint" />
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="col-sm-9 col-sm-offset-3">
+          <button class="btn btn-primary" type="button" data-ng-click="$ctrl.submit()" data-ng-disabled="$ctrl.status == 'submitting'">
+            Create Algorithm
+            <i data-ng-show="$ctrl.status == 'submitting'" class="fa fa-spinner fa-spin"></i>
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="col-sm-6">
+    <form class="form-horizontal">
+      <div class="form-group">
+        <div class="col-sm-6">
+          <h4>Parameters</h4>
+        </div>
+        <div class="col-sm-6">
+          <button class="btn btn-primary pull-right" role="button" data-ng-click="$ctrl.addRow()">
+            <i class="fa fa-plus"></i>
+          </button>
+        </div>
+      </div>
+      <div class="form-group" data-ng-show="$ctrl.parameters.length">
+        <div class="col-sm-5">
+          <h5>Name</h5>
+        </div>
+        <div class="col-sm-5">
+          <h5>Type</h5>
+        </div>
+      </div>
+      <div data-ng-repeat="parameter in $ctrl.parameters">
+        <div class="form-group">
+          <div class="col-sm-5">
+            <input type="text" placeholder="Parameter Name" class="form-control" data-ng-model="$ctrl.parameters[$index].name" />
+          </div>
+          <div class="col-sm-5">
+            <select class="form-control" data-ng-model="$ctrl.parameters[$index].type">
+              <option value="string">String</option>
+              <option value="int">Integer</option>
+              <option value="double">Double</option>
+              <option value="enum">Enum</option>
+            </select>
+          </div>
+          <div class="col-sm-2">
+            <button class="btn btn-danger pull-right" role="button" data-ng-click="$ctrl.removeRow($index)">
+              <i class="fa fa-minus"></i>
+            </button>
+          </div>
+        </div>
+        <data-create-algorithm-enum data-enum-values="$ctrl.parameters[$index].enumValues" data-ng-show="$ctrl.parameters[$index].type == 'enum'"></data-create-algorithm-enum>
+      </div>
+      <div class="form-group" data-ng-hide="$ctrl.parameters.length">
+        <div class="col-sm-12">
+          <p>None currently</p>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

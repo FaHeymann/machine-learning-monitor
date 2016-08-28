@@ -8,7 +8,7 @@ public class PasswordHelper {
     /**
      * @param literalPassword the unhashed password
      * @return the hashed password
-     * @throws NoSuchAlgorithmException
+     * @throws NoSuchAlgorithmException if the password is empty
      */
     public static String createPassword(String literalPassword) throws NoSuchAlgorithmException {
         if (null == literalPassword) {
@@ -23,9 +23,6 @@ public class PasswordHelper {
      * @return whether the passwords match
      */
     public static boolean checkPassword(String candidate, String encryptedPassword) {
-        if (null == candidate || null == encryptedPassword) {
-            return false;
-        }
-        return BCrypt.checkpw(candidate, encryptedPassword);
+        return !(null == candidate || null == encryptedPassword) && BCrypt.checkpw(candidate, encryptedPassword);
     }
 }

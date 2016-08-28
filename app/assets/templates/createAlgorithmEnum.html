@@ -1,0 +1,25 @@
+<div class="form-group">
+  <div class="col-sm-5 col-sm-offset-1">
+    <h5>Enum Values</h5>
+  </div>
+  <div class="col-sm-5">
+    <button type="button" class="btn btn-primary btn-sm pull-right" data-ng-click="$ctrl.addValue()">
+      <i class="fa fa-plus"></i>
+    </button>
+  </div>
+</div>
+<div class="form-group" data-ng-repeat="value in $ctrl.enumValues">
+  <div class="col-sm-8 col-sm-offset-1">
+    <input type="text" placeholder="Enum Value" class="form-control" data-ng-model="$ctrl.enumValues[$index].name">
+  </div>
+  <div class="col-sm-2">
+    <button type="button" class="btn btn-danger btn-sm pull-right" data-ng-click="$ctrl.removeValue($index)">
+      <i class="fa fa-minus"></i>
+    </button>
+  </div>
+</div>
+<div class="form-group" data-ng-hide="$ctrl.enumValues.length">
+  <div class="col-sm-11 col-sm-offset-1">
+    <p>None currently</p>
+  </div>
+</div>
