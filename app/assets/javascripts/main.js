@@ -5,17 +5,13 @@ import CreateAlgorithmEnumController from './controllers/createAlgorithmEnumCont
 // eslint-disable-next-line no-undef
 angular.module('machine-learning-monitor', ['chart.js', 'ui.bootstrap'])
 
-.directive('results', () => {
-  return {
-    restrict: 'A',
-    scope: true,
-    controllerAs: 'ctrl',
-    bindToController: {
-      featureSetId: '@',
-      algorithmId: '@',
-    },
-    controller: ResultsController,
-  };
+.component('results', {
+  controller: ResultsController,
+  templateUrl: '/assets/templates/results.html',
+  bindings: {
+    featureSets: '<',
+    algorithms: '<',
+  },
 })
 
 .component('createAlgorithm', {

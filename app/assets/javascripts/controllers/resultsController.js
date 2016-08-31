@@ -9,6 +9,9 @@ export default class ResultsController {
     this.chartSeries = [];
     this.chartOptions = {};
 
+    this.featureSetId = '' + this.featureSets[0].id;
+    this.algorithmId = '' + this.algorithms[0].id;
+
     this.fetch();
   }
 

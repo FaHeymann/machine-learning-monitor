@@ -19,7 +19,7 @@ public class ResultController extends Controller {
         List<FeatureSet> featureSets = FeatureSet.find.all();
         List<Algorithm> algorithms = Algorithm.find.all();
 
-        return ok(results.render(featureSets, algorithms));
+        return ok(results.render(Json.toJson(featureSets).toString(), Json.toJson(algorithms).toString()));
     }
 
     @Security.Authenticated(Secured.class)
