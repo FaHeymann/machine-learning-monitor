@@ -1,21 +1,19 @@
 package controllers;
 
-import com.fasterxml.jackson.databind.JsonNode;
 import com.google.inject.Inject;
 import models.Algorithm;
 import models.Parameter;
 import models.ParameterEnumValue;
 import play.data.Form;
 import play.data.FormFactory;
-import play.libs.Json;
 import play.mvc.BodyParser;
 import play.mvc.Controller;
 import play.mvc.Result;
 import play.mvc.Security;
 import views.html.algorithms.*;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class AlgorithmController extends Controller {
 
@@ -31,7 +29,6 @@ public class AlgorithmController extends Controller {
 
     @Security.Authenticated(Secured.class)
     public Result create() {
-//        return ok(create.render(formFactory.form(AlgorithmData.class)));
         return ok(create.render());
     }
 
@@ -50,28 +47,25 @@ public class AlgorithmController extends Controller {
         algorithm.setDescription(algorithmForm.get().getDescription());
         algorithm.setEndpoint(algorithmForm.get().getEndpoint());
 
-        List<Parameter> parameters = new ArrayList<>();
-        for (ParameterData parameterData : algorithmForm.get().getParameters()) {
-            Parameter parameter = new Parameter();
-            parameter.setName(parameterData.getName());
-            parameter.setType(parameterData.getType());
-
-
-            List<ParameterEnumValue> parameterEnumValues = new ArrayList<>();
-            for (String enumValue : parameterData.getEnumValues()) {
-                if(enumValue.equals("")) {
-                    continue;
-                }
-
-                ParameterEnumValue parameterEnumValue = new ParameterEnumValue();
-                parameterEnumValue.setValue(enumValue);
-                parameterEnumValues.add(parameterEnumValue);
-            }
-            parameter.setEnumValues(parameterEnumValues);
-
-            parameters.add(parameter);
+        if (algorithmForm.get().getParameters() != null) {
+            algorithm.setParameters(
+                algorithmForm.get().getParameters().stream()
+                .map(p -> {
+                    Parameter parameter = new Parameter();
+                    parameter.setName(p.getName());
+                    parameter.setType(p.getType());
+                    parameter.setEnumValues(p.getEnumValues().stream()
+                        .filter(e -> !e.equals("") && p.getType().equals(Parameter.Type.ENUM))
+                        .map(e -> {
+                            ParameterEnumValue parameterEnumValue = new ParameterEnumValue();
+                            parameterEnumValue.setValue(e);
+                            return parameterEnumValue;
+                        }).collect(Collectors.toList())
+                    );
+                    return parameter;
+                }).collect(Collectors.toList())
+            );
         }
-        algorithm.setParameters(parameters);
 
         algorithm.save();
 
@@ -136,9 +130,11 @@ public class AlgorithmController extends Controller {
                 return "Endpoint must not be empty";
             }
 
-            for (ParameterData parameterData : this.getParameters()) {
-                if (parameterData.validate() != null) {
-                    return parameterData.validate();
+            if (this.getParameters() != null) {
+                for (ParameterData parameterData : this.getParameters()) {
+                    if (parameterData.validate() != null) {
+                        return parameterData.validate();
+                    }
                 }
             }
 

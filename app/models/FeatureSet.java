@@ -1,12 +1,14 @@
 package models;
 
 import com.avaje.ebean.Model;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Entity
 public class FeatureSet extends TimestampedModel {
@@ -21,14 +23,9 @@ public class FeatureSet extends TimestampedModel {
     @NotNull
     private String description;
 
-    @NotNull
-    private int columnAmount;
-
-    @Transient
-    private List<String> labels;
-
-    @NotNull
-    private String serializedLabels;
+    @OneToMany(cascade = CascadeType.ALL)
+    @JsonIgnore
+    private List<FeatureLabel> labels;
 
     @OneToMany(cascade = CascadeType.ALL)
     @JsonManagedReference
@@ -40,6 +37,12 @@ public class FeatureSet extends TimestampedModel {
 
     @ManyToOne
     private User user;
+
+    public FeatureSet() {
+        this.labels = new ArrayList<>();
+        this.features = new ArrayList<>();
+        this.resultSets = new ArrayList<>();
+    }
 
     public int getId() {
         return id;
@@ -65,30 +68,22 @@ public class FeatureSet extends TimestampedModel {
         this.description = description;
     }
 
-    public int getColumnAmount() {
-        return columnAmount;
+    public List<FeatureLabel> getLabels() {
+        return this.labels;
     }
 
-    public void setColumnAmount(int columnAmount) {
-        this.columnAmount = columnAmount;
+    public List<String> getLabelStrings() {
+        return this.labels.stream()
+            .map(FeatureLabel::getValue)
+            .collect(Collectors.toList());
     }
 
-    public List<String> getLabels() {
-        return Arrays.asList(serializedLabels.split(";;;"));
-    }
-
-    public void setLabels(List<String> labels) {
+    public void setLabels(List<FeatureLabel> labels) {
         this.labels = labels;
-        this.serializedLabels = String.join(";;;", labels);
     }
 
-    public String getSerializedLabels() {
-        return serializedLabels;
-    }
-
-    public void setSerializedLabels(String serializedLabels) {
-        this.serializedLabels = serializedLabels;
-        this.labels = Arrays.asList(serializedLabels.split(";;;"));
+    public void addLabel(FeatureLabel label) {
+        this.labels.add(label);
     }
 
     public List<Feature> getFeatures() {
@@ -97,6 +92,10 @@ public class FeatureSet extends TimestampedModel {
 
     public void setFeatures(List<Feature> features) {
         this.features = features;
+    }
+
+    public void addFeature(Feature feature) {
+        this.features.add(feature);
     }
 
     public List<ResultSet> getResultSets() {

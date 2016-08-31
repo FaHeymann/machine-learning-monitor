@@ -1,36 +1,31 @@
 package helpers;
 
 import models.Feature;
+import models.FeatureEntry;
+import models.FeatureLabel;
+import models.FeatureSet;
 import play.mvc.Http;
 
 import java.io.*;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public class DataFileParser {
 
-    private final Http.MultipartFormData.FilePart<File> dataFile;
     private String error;
-    private List<Feature> features;
-    private int columnAmount;
-    private String[] labels;
+    private FeatureSet featureSet;
 
-    public DataFileParser(Http.MultipartFormData.FilePart<File> dataFile) {
-        this.dataFile = dataFile;
-        this.features = new ArrayList<>();
+    public void parse(Http.MultipartFormData.FilePart<File> dataFile) {
+        this.featureSet = new FeatureSet();
 
-        this.parse();
-    }
-
-    private void parse() {
-        if (!this.dataFile.getContentType().equals("text/csv")) {
+        if (!dataFile.getContentType().equals("text/csv")) {
             this.error = "The file must be of type \"text/csv\"";
             return;
         }
 
         try {
-            BufferedReader br = new BufferedReader(new FileReader(this.dataFile.getFile()));
+            BufferedReader br = new BufferedReader(new FileReader(dataFile.getFile()));
             String line = br.readLine();
 
             if (line == null) {
@@ -39,26 +34,35 @@ public class DataFileParser {
             }
 
             String[] split = line.split(",");
-            this.labels = Arrays.copyOf(split, split.length - 1);
-            this.columnAmount = split.length - 1;
+            this.featureSet.setLabels(
+                Arrays.stream(Arrays.copyOf(split, split.length - 1))
+                    .map(e -> new FeatureLabel(e, this.featureSet))
+                    .collect(Collectors.toList())
+            );
+            int columnAmount = split.length - 1;
 
             for (int count = 2; (line = br.readLine()) != null; count++) {
                 split = line.split(",");
-                if (split.length != this.columnAmount + 1) {
-                    this.error = String.format("Could not parse line %d: expected %d elements but found %d", count, this.columnAmount + 1, split.length);
+                if (split.length != columnAmount + 1) {
+                    this.error = String.format("Could not parse line %d: expected %d elements but found %d", count, columnAmount + 1, split.length);
                     return;
                 }
 
+                String[] localSplit = split.clone();
+
                 Feature feature = new Feature();
-                feature.setColumnAmount(this.columnAmount);
-                feature.setData(Arrays.asList(Arrays.copyOf(split, split.length - 1)));
+                feature.setEntries(
+                    IntStream.range(0, split.length - 1)
+                        .mapToObj(i -> new FeatureEntry(localSplit[i], feature, this.featureSet.getLabels().get(i)))
+                        .collect(Collectors.toList())
+                );
                 try {
                     feature.setResult(Double.parseDouble(split[split.length - 1]));
                 } catch(NumberFormatException e) {
                     this.error = String.format("Could not parse line %d: %s is not a valid numeric value but was specified as the result", count, split[split.length - 1]);
                     return;
                 }
-                this.features.add(feature);
+                this.featureSet.addFeature(feature);
             }
         } catch (FileNotFoundException e) {
             this.error = "File not found";
@@ -67,20 +71,12 @@ public class DataFileParser {
         }
     }
 
+    public FeatureSet getFeatureSet() {
+        return this.featureSet;
+    }
+
     public String getError() {
         return error;
-    }
-
-    public List<Feature> getFeatures() {
-        return features;
-    }
-
-    public int getColumnAmount() {
-        return columnAmount;
-    }
-
-    public String[] getLabels() {
-        return labels;
     }
 
     public boolean hasError() {

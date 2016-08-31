@@ -8,7 +8,7 @@
     <table class="table table-hover table-condensed table-striped">
         <thead>
             <tr>
-                @for(label <- featureSet.getLabels()) {
+                @for(label <- featureSet.getLabelStrings()) {
                     <th>@label</th>
                 }
                 <th>Result</th>
@@ -17,7 +17,7 @@
         <tbody>
             @for(feature <- featureSet.getFeatures()) {
                 <tr>
-                    @for(entry <- feature.getData()) {
+                    @for(entry <- feature.getEntryStrings()) {
                         <td>@entry</td>
                     }
                     <td>@feature.getResult()</td>

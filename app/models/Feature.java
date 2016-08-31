@@ -2,11 +2,13 @@ package models;
 
 import com.avaje.ebean.Model;
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Entity
 public class Feature extends TimestampedModel {
@@ -15,14 +17,9 @@ public class Feature extends TimestampedModel {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @NotNull
-    private int columnAmount;
-
-    @Transient
-    private List<String> data;
-
-    @NotNull
-    private String serializedData;
+    @OneToMany(cascade = CascadeType.ALL)
+    @JsonIgnore
+    private List<FeatureEntry> entries;
 
     @NotNull
     private double result;
@@ -40,30 +37,18 @@ public class Feature extends TimestampedModel {
         this.id = id;
     }
 
-    public int getColumnAmount() {
-        return columnAmount;
+    public List<FeatureEntry> getEntries() {
+        return entries;
     }
 
-    public void setColumnAmount(int columnAmount) {
-        this.columnAmount = columnAmount;
+    public List<String> getEntryStrings() {
+        return entries.stream()
+            .map(FeatureEntry::getValue)
+            .collect(Collectors.toList());
     }
 
-    public List<String> getData() {
-        return Arrays.asList(serializedData.split(";;;"));
-    }
-
-    public void setData(List<String> data) {
-        this.data = data;
-        this.serializedData = String.join(";;;", data);
-    }
-
-    public String getSerializedData() {
-        return serializedData;
-    }
-
-    public void setSerializedData(String serializedData) {
-        this.serializedData = serializedData;
-        this.data = Arrays.asList(serializedData.split(";;;"));
+    public void setEntries(List<FeatureEntry> entries) {
+        this.entries = entries;
     }
 
     public double getResult() {

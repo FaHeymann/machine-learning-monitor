@@ -15,8 +15,6 @@ create table algorithm (
 
 create table feature (
   id                            integer auto_increment not null,
-  column_amount                 integer not null,
-  serialized_data               varchar(255) not null,
   result                        double not null,
   feature_set_id                integer not null,
   created_at                    datetime(6) not null,
@@ -24,12 +22,25 @@ create table feature (
   constraint pk_feature primary key (id)
 );
 
+create table feature_entry (
+  id                            integer auto_increment not null,
+  feature_id                    integer not null,
+  feature_label_id              integer not null,
+  value                         varchar(255) not null,
+  constraint pk_feature_entry primary key (id)
+);
+
+create table feature_label (
+  id                            integer auto_increment not null,
+  feature_set_id                integer not null,
+  value                         varchar(255) not null,
+  constraint pk_feature_label primary key (id)
+);
+
 create table feature_set (
   id                            integer auto_increment not null,
   name                          varchar(255) not null,
   description                   varchar(255) not null,
-  column_amount                 integer not null,
-  serialized_labels             varchar(255) not null,
   user_id                       integer,
   created_at                    datetime(6) not null,
   updated_at                    datetime(6) not null,
@@ -85,6 +96,15 @@ create table user (
 alter table feature add constraint fk_feature_feature_set_id foreign key (feature_set_id) references feature_set (id) on delete restrict on update restrict;
 create index ix_feature_feature_set_id on feature (feature_set_id);
 
+alter table feature_entry add constraint fk_feature_entry_feature_id foreign key (feature_id) references feature (id) on delete restrict on update restrict;
+create index ix_feature_entry_feature_id on feature_entry (feature_id);
+
+alter table feature_entry add constraint fk_feature_entry_feature_label_id foreign key (feature_label_id) references feature_label (id) on delete restrict on update restrict;
+create index ix_feature_entry_feature_label_id on feature_entry (feature_label_id);
+
+alter table feature_label add constraint fk_feature_label_feature_set_id foreign key (feature_set_id) references feature_set (id) on delete restrict on update restrict;
+create index ix_feature_label_feature_set_id on feature_label (feature_set_id);
+
 alter table feature_set add constraint fk_feature_set_user_id foreign key (user_id) references user (id) on delete restrict on update restrict;
 create index ix_feature_set_user_id on feature_set (user_id);
 
@@ -109,6 +129,15 @@ create index ix_result_set_algorithm_id on result_set (algorithm_id);
 alter table feature drop foreign key fk_feature_feature_set_id;
 drop index ix_feature_feature_set_id on feature;
 
+alter table feature_entry drop foreign key fk_feature_entry_feature_id;
+drop index ix_feature_entry_feature_id on feature_entry;
+
+alter table feature_entry drop foreign key fk_feature_entry_feature_label_id;
+drop index ix_feature_entry_feature_label_id on feature_entry;
+
+alter table feature_label drop foreign key fk_feature_label_feature_set_id;
+drop index ix_feature_label_feature_set_id on feature_label;
+
 alter table feature_set drop foreign key fk_feature_set_user_id;
 drop index ix_feature_set_user_id on feature_set;
 
@@ -130,6 +159,10 @@ drop index ix_result_set_algorithm_id on result_set;
 drop table if exists algorithm;
 
 drop table if exists feature;
+
+drop table if exists feature_entry;
+
+drop table if exists feature_label;
 
 drop table if exists feature_set;
 

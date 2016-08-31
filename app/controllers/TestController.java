@@ -79,7 +79,7 @@ public class TestController extends Controller {
         for(Feature feature : featureSet.getFeatures()) {
             ObjectNode featureNode = Json.newObject();
             featureNode.set("result", Json.toJson(feature.getResult()));
-            featureNode.set("data", Json.toJson(feature.getData()));
+            featureNode.set("data", Json.toJson(feature.getEntryStrings()));
             features.add(featureNode);
         }
 

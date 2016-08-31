@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -30,6 +31,11 @@ public class Algorithm extends TimestampedModel {
     @OneToMany(cascade = CascadeType.ALL)
     @JsonManagedReference
     private List<Parameter> parameters;
+
+    public Algorithm() {
+        this.parameters = new ArrayList<>();
+        this.resultSets = new ArrayList<>();
+    }
 
     public int getId() {
         return id;

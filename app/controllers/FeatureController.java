@@ -20,6 +20,9 @@ public class FeatureController extends Controller {
     @Inject
     private FormFactory formFactory;
 
+    @Inject
+    private DataFileParser parser;
+
     @Security.Authenticated(Secured.class)
     public Result list() {
         List<FeatureSet> featureSets = FeatureSet.find.all();
@@ -48,19 +51,16 @@ public class FeatureController extends Controller {
             return badRequest(create.render(featureSetForm));
         }
 
-        DataFileParser parser = new DataFileParser(dataFile);
+        this.parser.parse(dataFile);
 
-        if (parser.hasError()) {
-            featureSetForm.reject(parser.getError());
+        if (this.parser.hasError()) {
+            featureSetForm.reject(this.parser.getError());
             return badRequest(create.render(featureSetForm));
         }
 
-        FeatureSet featureSet = new FeatureSet();
+        FeatureSet featureSet = this.parser.getFeatureSet();
         featureSet.setName(featureSetForm.get().getName());
         featureSet.setDescription(featureSetForm.get().getDescription());
-        featureSet.setColumnAmount(parser.getColumnAmount());
-        featureSet.setLabels(Arrays.asList(parser.getLabels()));
-        featureSet.setFeatures(parser.getFeatures());
 
         featureSet.save();
 
