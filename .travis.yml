@@ -1,15 +1,18 @@
-language: java
-
-jdk:
-  - oraclejdk8
+language: scala
+scala:
+  - 2.11.1
 
 env:
   - PLAY_VERSION=2.5.3
 
 before-script:
   - npm install
+  - wget http://downloads.typesafe.com/releases/play-${PLAY_VERSION}.zip
+  - unzip -q play-${PLAY_VERSION}.zip
 
-#script:
+script:
+  - ls- la
 #  - play-${PLAY_VERSION}/play test
 #  - play-${PLAY_VERSION}/play test:checkstyle
-#  - npm run test
+  - sbt ++$TRAVIS_SCALA_VERSION test
+  - npm run test
