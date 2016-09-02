@@ -6,6 +6,8 @@ lazy val root = (project in file(".")).enablePlugins(PlayJava, PlayEbean)
 
 scalaVersion := "2.11.7"
 
+checkstyleSeverityLevel := Some(CheckstyleSeverityLevel.Error)
+
 libraryDependencies ++= Seq(
   javaJdbc,
   cache,

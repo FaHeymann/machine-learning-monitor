@@ -1,7 +1,7 @@
 package controllers;
 
 import com.google.inject.Inject;
-import helpers.DataFileParser;
+
 import models.FeatureSet;
 import play.data.Form;
 import play.data.FormFactory;
@@ -9,10 +9,12 @@ import play.mvc.Controller;
 import play.mvc.Http;
 import play.mvc.Result;
 import play.mvc.Security;
-import views.html.features.*;
+import services.DataFileParser;
+import views.html.features.create;
+import views.html.features.detail;
+import views.html.features.list;
 
 import java.io.File;
-import java.util.Arrays;
 import java.util.List;
 
 public class FeatureController extends Controller {
@@ -24,19 +26,19 @@ public class FeatureController extends Controller {
     private DataFileParser parser;
 
     @Security.Authenticated(Secured.class)
-    public Result list() {
+    public final Result list() {
         List<FeatureSet> featureSets = FeatureSet.find.all();
 
         return ok(list.render(featureSets));
     }
 
     @Security.Authenticated(Secured.class)
-    public Result create() {
+    public final Result create() {
         return ok(create.render(formFactory.form(FeatureSetData.class)));
     }
 
     @Security.Authenticated(Secured.class)
-    public Result save() {
+    public final Result save() {
 
         Form<FeatureSetData> featureSetForm = formFactory.form(FeatureSetData.class).bindFromRequest();
         if (featureSetForm.hasErrors()) {
@@ -69,7 +71,7 @@ public class FeatureController extends Controller {
     }
 
     @Security.Authenticated(Secured.class)
-    public Result detail(int featureSetId) {
+    public final Result detail(final int featureSetId) {
         FeatureSet featureSet = FeatureSet.find.byId(featureSetId);
 
         return ok(detail.render(featureSet));
@@ -77,31 +79,31 @@ public class FeatureController extends Controller {
 
     public static class FeatureSetData {
 
-        protected String name;
-        protected String description;
+        private String name;
+        private String description;
 
-        public String getName() {
+        public final String getName() {
             return name;
         }
 
-        public void setName(String name) {
+        public final void setName(final String name) {
             this.name = name;
         }
 
-        public String getDescription() {
+        public final String getDescription() {
             return description;
         }
 
-        public void setDescription(String description) {
+        public final void setDescription(final String description) {
             this.description = description;
         }
 
-        public String validate() {
+        public final String validate() {
 
-            if(name == null || name.equals("")) {
+            if (name == null || name.equals("")) {
                 return "Name must not be empty";
             }
-            if(description == null || description.equals("")) {
+            if (description == null || description.equals("")) {
                 return "Description must not be empty";
             }
             return null;

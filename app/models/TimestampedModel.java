@@ -14,30 +14,30 @@ public class TimestampedModel extends Model {
     @Temporal(TemporalType.TIMESTAMP)
     @Formats.DateTime(pattern = "yyyy-MM-dd HH:mm:ss")
     @CreatedTimestamp
-    @JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     @Column(updatable = false)
-    protected Date createdAt;
+    private Date createdAt;
 
     @Temporal(TemporalType.TIMESTAMP)
     @Formats.DateTime(pattern = "yyyy-MM-dd HH:mm:ss")
     @UpdatedTimestamp
-    @JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     @Version
-    protected Date updatedAt;
+    private Date updatedAt;
 
-    public Date getCreatedAt(){
+    public final Date getCreatedAt(){
         return createdAt;
     }
 
-    public void setCreatedAt(Date date){
+    public final void setCreatedAt(Date date){
         createdAt = date;
     }
 
-    public Date getUpdatedAt(){
+    public final Date getUpdatedAt(){
         return updatedAt;
     }
 
-    public void setUpdatedAt(Date date){
+    public final void setUpdatedAt(Date date){
         updatedAt = date;
     }
 }

@@ -7,9 +7,9 @@ import javax.inject.Inject;
 public class Filters implements HttpFilters {
 
     @Inject
-    CORSFilter corsFilter;
+    private CORSFilter corsFilter;
 
-    public EssentialFilter[] filters() {
-        return new EssentialFilter[] { corsFilter.asJava() };
+    public final EssentialFilter[] filters() {
+        return new EssentialFilter[] {corsFilter.asJava()};
     }
 }

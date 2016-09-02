@@ -13,6 +13,8 @@ export default class ResultsController {
     this.algorithmId = '' + this.algorithms[0].id;
 
     this.fetch();
+
+    this.asd = (muh) => muh.asd;
   }
 
   handleClick(points) {
@@ -21,20 +23,15 @@ export default class ResultsController {
     }
 
     const date = points[0].label;
-
-    const dataEntry = this.data.find(entry => {
-      return entry.createdAt === date;
-    });
+    const dataEntry = this.data.find(entry => entry.createdAt === date);
 
     this.$window.location.href = '/results/' + dataEntry.id;
   }
 
   assignMetric(name) {
     this.chartData = [
-      this.data.map(entry => {
-        return entry[name];
-      }
-    )];
+      this.data.map(entry => entry[name]),
+    ];
     if (!this.data.length) {
       this.chartData = [[0]];
     }
@@ -46,11 +43,9 @@ export default class ResultsController {
 
   fetch() {
     this.$http.get('/results/search/' + this.featureSetId + '/' + this.algorithmId)
-      .then((response) => {
+      .then(response => {
         this.data = response.data;
-        this.chartLabels = this.data.map(entry => {
-          return entry.createdAt;
-        });
+        this.chartLabels = this.data.map(entry => entry.createdAt);
         this.update();
       });
   }

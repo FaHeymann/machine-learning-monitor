@@ -10,7 +10,9 @@ import play.mvc.BodyParser;
 import play.mvc.Controller;
 import play.mvc.Result;
 import play.mvc.Security;
-import views.html.algorithms.*;
+import views.html.algorithms.create;
+import views.html.algorithms.detail;
+import views.html.algorithms.list;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -21,20 +23,20 @@ public class AlgorithmController extends Controller {
     private FormFactory formFactory;
 
     @Security.Authenticated(Secured.class)
-    public Result list() {
+    public final Result list() {
         List<Algorithm> algorithms = Algorithm.find.all();
 
         return ok(list.render(algorithms));
     }
 
     @Security.Authenticated(Secured.class)
-    public Result create() {
+    public final Result create() {
         return ok(create.render());
     }
 
     @Security.Authenticated(Secured.class)
     @BodyParser.Of(BodyParser.Json.class)
-    public Result save() {
+    public final Result save() {
 
         Form<AlgorithmData> algorithmForm = formFactory.form(AlgorithmData.class).bindFromRequest();
 
@@ -73,7 +75,7 @@ public class AlgorithmController extends Controller {
     }
 
     @Security.Authenticated(Secured.class)
-    public Result detail(int algorithmId) {
+    public final Result detail(final int algorithmId) {
         Algorithm algorithm = Algorithm.find.byId(algorithmId);
 
         return ok(detail.render(algorithm));
@@ -81,44 +83,44 @@ public class AlgorithmController extends Controller {
 
     public static class AlgorithmData {
 
-        protected String name;
-        protected String description;
-        protected String endpoint;
-        protected List<ParameterData> parameters;
+        private String name;
+        private String description;
+        private String endpoint;
+        private List<ParameterData> parameters;
 
-        public String getName() {
+        public final String getName() {
             return name;
         }
 
-        public void setName(String name) {
+        public final void setName(final String name) {
             this.name = name;
         }
 
-        public String getDescription() {
+        public final String getDescription() {
             return description;
         }
 
-        public void setDescription(String description) {
+        public final void setDescription(final String description) {
             this.description = description;
         }
 
-        public String getEndpoint() {
+        public final String getEndpoint() {
             return endpoint;
         }
 
-        public void setEndpoint(String endpoint) {
+        public final void setEndpoint(final String endpoint) {
             this.endpoint = endpoint;
         }
 
-        public List<ParameterData> getParameters() {
+        public final List<ParameterData> getParameters() {
             return parameters;
         }
 
-        public void setParameters(List<ParameterData> parameters) {
+        public final void setParameters(final List<ParameterData> parameters) {
             this.parameters = parameters;
         }
 
-        public String validate() {
+        public final String validate() {
 
             if (name == null || name.equals("")) {
                 return "Name must not be empty";
@@ -144,35 +146,35 @@ public class AlgorithmController extends Controller {
 
     public static class ParameterData {
 
-        protected String name;
-        protected Parameter.Type type;
-        protected List<String> enumValues;
+        private String name;
+        private Parameter.Type type;
+        private List<String> enumValues;
 
-        public String getName() {
+        public final String getName() {
             return name;
         }
 
-        public void setName(String name) {
+        public final void setName(final String name) {
             this.name = name;
         }
 
-        public Parameter.Type getType() {
+        public final Parameter.Type getType() {
             return type;
         }
 
-        public void setType(String type) {
+        public final void setType(final String type) {
             this.type = Parameter.Type.fromString(type);
         }
 
-        public List<String> getEnumValues() {
+        public final List<String> getEnumValues() {
             return enumValues;
         }
 
-        public void setEnumValues(List<String> enumValues) {
+        public final void setEnumValues(final List<String> enumValues) {
             this.enumValues = enumValues;
         }
 
-        public String validate() {
+        public final String validate() {
             if (name == null || name.equals("")) {
                 return "Parameter name must not be empty";
             }

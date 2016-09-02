@@ -1,0 +1,10 @@
+language: scala
+scala:
+- 2.11.7
+
+before-script:
+- npm install
+script:
+- activator test
+- 'activator test:checkstyle'
+- npm run eslint
