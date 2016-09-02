@@ -4,7 +4,13 @@ import com.avaje.ebean.Model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
-import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
@@ -48,7 +54,7 @@ public class FeatureSet extends TimestampedModel {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(final int id) {
         this.id = id;
     }
 
@@ -56,7 +62,7 @@ public class FeatureSet extends TimestampedModel {
         return name;
     }
 
-    public void setName(String name) {
+    public void setName(final String name) {
         this.name = name;
     }
 
@@ -64,7 +70,7 @@ public class FeatureSet extends TimestampedModel {
         return description;
     }
 
-    public void setDescription(String description) {
+    public void setDescription(final String description) {
         this.description = description;
     }
 
@@ -78,11 +84,11 @@ public class FeatureSet extends TimestampedModel {
             .collect(Collectors.toList());
     }
 
-    public void setLabels(List<FeatureLabel> labels) {
+    public void setLabels(final List<FeatureLabel> labels) {
         this.labels = labels;
     }
 
-    public void addLabel(FeatureLabel label) {
+    public void addLabel(final FeatureLabel label) {
         this.labels.add(label);
     }
 
@@ -90,11 +96,11 @@ public class FeatureSet extends TimestampedModel {
         return features;
     }
 
-    public void setFeatures(List<Feature> features) {
+    public void setFeatures(final List<Feature> features) {
         this.features = features;
     }
 
-    public void addFeature(Feature feature) {
+    public void addFeature(final Feature feature) {
         this.features.add(feature);
     }
 
@@ -102,7 +108,7 @@ public class FeatureSet extends TimestampedModel {
         return resultSets;
     }
 
-    public void setResultSets(List<ResultSet> resultSets) {
+    public void setResultSets(final List<ResultSet> resultSets) {
         this.resultSets = resultSets;
     }
 
@@ -110,9 +116,10 @@ public class FeatureSet extends TimestampedModel {
         return user;
     }
 
-    public void setUser(User user) {
+    public void setUser(final User user) {
         this.user = user;
     }
 
+    @annotations.AllowPublic
     public static Model.Finder<Integer, FeatureSet> find = new Model.Finder<>(FeatureSet.class);
 }

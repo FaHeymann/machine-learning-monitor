@@ -1,9 +1,13 @@
 package models;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.validation.constraints.NotNull;
 
-import com.avaje.ebean.Model;
 import helpers.PasswordHelper;
 
 import java.security.NoSuchAlgorithmException;
@@ -29,7 +33,7 @@ public class User extends TimestampedModel {
     @OneToMany
     private List<FeatureSet> featureSets;
 
-    public User(String email, String name, String password) {
+    public User(final String email, final String name, final String password) {
         this.email = email;
         this.name = name;
         this.setPassword(password);
@@ -39,7 +43,7 @@ public class User extends TimestampedModel {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(final Integer id) {
         this.id = id;
     }
 
@@ -47,7 +51,7 @@ public class User extends TimestampedModel {
         return email;
     }
 
-    public void setEmail(String email) {
+    public void setEmail(final String email) {
         this.email = email;
     }
 
@@ -55,7 +59,7 @@ public class User extends TimestampedModel {
         return name;
     }
 
-    public void setName(String name) {
+    public void setName(final String name) {
         this.name = name;
     }
 
@@ -63,7 +67,7 @@ public class User extends TimestampedModel {
         return this.password;
     }
 
-    public void setPassword(String password) {
+    public void setPassword(final String password) {
         try {
             this.password = PasswordHelper.createPassword(password);
         } catch (NoSuchAlgorithmException e) {
@@ -75,14 +79,17 @@ public class User extends TimestampedModel {
         return featureSets;
     }
 
-    public void setFeatureSets(List<FeatureSet> featureSets) {
+    public void setFeatureSets(final List<FeatureSet> featureSets) {
         this.featureSets = featureSets;
     }
 
-    public static User authenticate(String email, String password) {
+    public static User authenticate(final String email, final String password) {
         User user = find.where().eq("email", email).findUnique();
-        return user != null && PasswordHelper.checkPassword(password, user.password) ? user : null;
+        return user != null && PasswordHelper.checkPassword(password, user.password)
+            ? user
+            : null;
     }
 
+    @annotations.AllowPublic
     public static Finder<Integer, User> find = new Finder<>(User.class);
 }

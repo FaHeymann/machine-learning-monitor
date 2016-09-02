@@ -6,7 +6,11 @@ import com.avaje.ebean.annotation.UpdatedTimestamp;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import play.data.format.Formats;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.MappedSuperclass;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+import javax.persistence.Version;
 import java.util.Date;
 
 @MappedSuperclass
@@ -25,19 +29,19 @@ public class TimestampedModel extends Model {
     @Version
     private Date updatedAt;
 
-    public final Date getCreatedAt(){
+    public final Date getCreatedAt() {
         return createdAt;
     }
 
-    public final void setCreatedAt(Date date){
+    public final void setCreatedAt(final Date date) {
         createdAt = date;
     }
 
-    public final Date getUpdatedAt(){
+    public final Date getUpdatedAt() {
         return updatedAt;
     }
 
-    public final void setUpdatedAt(Date date){
+    public final void setUpdatedAt(final Date date) {
         updatedAt = date;
     }
 }

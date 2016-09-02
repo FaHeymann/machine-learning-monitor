@@ -5,6 +5,20 @@ scala:
 jdk:
   - oraclejdk8
 
+install:
+  - . $HOME/.nvm/nvm.sh
+  - nvm install stable
+  - nvm use stable
+  - npm install -g npm@3.10.6
+  - npm install
+  - sbt ++$TRAVIS_SCALA_VERSION compile
+
+script:
+  - sbt ++$TRAVIS_SCALA_VERSION test
+  - sbt ++$TRAVIS_SCALA_VERSION checkstyle
+#  - sbt ++$TRAVIS_SCALA_VERSION test:checkstyle
+  - npm run test
+
 cache:
   directories:
     - $HOME/.ivy2/cache
@@ -13,25 +27,3 @@ cache:
 before_cache:
   - find $HOME/.ivy2 -name "ivydata-*.properties" -delete
   - find $HOME/.sbt -name "*.lock" -delete
-
-env:
-  - PLAY_VERSION=2.5.3
-  - NODE_VERSION=6.5.0
-
-install:
-  - . $HOME/.nvm/nvm.sh
-  - nvm install stable
-  - nvm use stable
-  - npm install -g npm@3.10.6
-  - npm install
-
-script:
-  - ls -la
-  - java -version
-  - node -v
-  - npm -v
-#  - play-${PLAY_VERSION}/play test
-#  - play-${PLAY_VERSION}/play test:checkstyle
-  - sbt ++$TRAVIS_SCALA_VERSION test
-  - sbt ++$TRAVIS_SCALA_VERSION test:checkstyle
-  - npm run test

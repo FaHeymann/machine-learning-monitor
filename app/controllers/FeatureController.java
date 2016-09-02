@@ -26,19 +26,19 @@ public class FeatureController extends Controller {
     private DataFileParser parser;
 
     @Security.Authenticated(Secured.class)
-    public final Result list() {
+    public Result list() {
         List<FeatureSet> featureSets = FeatureSet.find.all();
 
         return ok(list.render(featureSets));
     }
 
     @Security.Authenticated(Secured.class)
-    public final Result create() {
+    public Result create() {
         return ok(create.render(formFactory.form(FeatureSetData.class)));
     }
 
     @Security.Authenticated(Secured.class)
-    public final Result save() {
+    public Result save() {
 
         Form<FeatureSetData> featureSetForm = formFactory.form(FeatureSetData.class).bindFromRequest();
         if (featureSetForm.hasErrors()) {
@@ -71,7 +71,7 @@ public class FeatureController extends Controller {
     }
 
     @Security.Authenticated(Secured.class)
-    public final Result detail(final int featureSetId) {
+    public Result detail(final int featureSetId) {
         FeatureSet featureSet = FeatureSet.find.byId(featureSetId);
 
         return ok(detail.render(featureSet));
@@ -82,23 +82,23 @@ public class FeatureController extends Controller {
         private String name;
         private String description;
 
-        public final String getName() {
+        public String getName() {
             return name;
         }
 
-        public final void setName(final String name) {
+        public void setName(final String name) {
             this.name = name;
         }
 
-        public final String getDescription() {
+        public String getDescription() {
             return description;
         }
 
-        public final void setDescription(final String description) {
+        public void setDescription(final String description) {
             this.description = description;
         }
 
-        public final String validate() {
+        public String validate() {
 
             if (name == null || name.equals("")) {
                 return "Name must not be empty";

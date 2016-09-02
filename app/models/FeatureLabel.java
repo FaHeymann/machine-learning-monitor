@@ -4,7 +4,13 @@ import com.avaje.ebean.Model;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
@@ -27,12 +33,12 @@ public class FeatureLabel extends Model {
     @NotNull
     private String value;
 
-    public FeatureLabel(String value, FeatureSet featureSet) {
+    public FeatureLabel(final String value, final FeatureSet featureSet) {
         this(value);
         this.setFeatureSet(featureSet);
     }
 
-    public FeatureLabel(String value) {
+    public FeatureLabel(final String value) {
         this.setValue(value);
     }
 
@@ -40,7 +46,7 @@ public class FeatureLabel extends Model {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(final int id) {
         this.id = id;
     }
 
@@ -48,7 +54,7 @@ public class FeatureLabel extends Model {
         return featureSet;
     }
 
-    public void setFeatureSet(FeatureSet featureSet) {
+    public void setFeatureSet(final FeatureSet featureSet) {
         this.featureSet = featureSet;
     }
 
@@ -56,7 +62,7 @@ public class FeatureLabel extends Model {
         return entries;
     }
 
-    public void setEntries(List<FeatureEntry> entries) {
+    public void setEntries(final List<FeatureEntry> entries) {
         this.entries = entries;
     }
 
@@ -64,9 +70,10 @@ public class FeatureLabel extends Model {
         return value;
     }
 
-    public void setValue(String value) {
+    public void setValue(final String value) {
         this.value = value;
     }
 
+    @annotations.AllowPublic
     public static Model.Finder<Integer, FeatureLabel> find = new Model.Finder<>(FeatureLabel.class);
 }

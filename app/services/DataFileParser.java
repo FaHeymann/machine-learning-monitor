@@ -6,7 +6,11 @@ import models.FeatureLabel;
 import models.FeatureSet;
 import play.mvc.Http;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -16,7 +20,7 @@ public class DataFileParser {
     private String error;
     private FeatureSet featureSet;
 
-    public void parse(Http.MultipartFormData.FilePart<File> dataFile) {
+    public void parse(final Http.MultipartFormData.FilePart<File> dataFile) {
         this.featureSet = new FeatureSet();
 
         if (!dataFile.getContentType().equals("text/csv")) {
@@ -26,14 +30,14 @@ public class DataFileParser {
 
         try {
             BufferedReader br = new BufferedReader(new FileReader(dataFile.getFile()));
-            String line = br.readLine();
+            String labelLine = br.readLine();
 
-            if (line == null) {
+            if (labelLine == null) {
                 this.error = "The file is empty";
                 return;
             }
 
-            String[] split = line.split(",");
+            String[] split = labelLine.split(",");
             this.featureSet.setLabels(
                 Arrays.stream(Arrays.copyOf(split, split.length - 1))
                     .map(e -> new FeatureLabel(e, this.featureSet))
@@ -41,10 +45,16 @@ public class DataFileParser {
             );
             int columnAmount = split.length - 1;
 
-            for (int count = 2; (line = br.readLine()) != null; count++) {
+            String line = br.readLine();
+            for (int count = 2; line != null; count++, line = br.readLine()) {
                 split = line.split(",");
                 if (split.length != columnAmount + 1) {
-                    this.error = String.format("Could not parse line %d: expected %d elements but found %d", count, columnAmount + 1, split.length);
+                    this.error = String.format(
+                        "Could not parse line %d: expected %d elements but found %d",
+                        count,
+                        columnAmount + 1,
+                        split.length
+                    );
                     return;
                 }
 
@@ -58,8 +68,12 @@ public class DataFileParser {
                 );
                 try {
                     feature.setResult(Double.parseDouble(split[split.length - 1]));
-                } catch(NumberFormatException e) {
-                    this.error = String.format("Could not parse line %d: %s is not a valid numeric value but was specified as the result", count, split[split.length - 1]);
+                } catch (NumberFormatException e) {
+                    this.error = String.format(
+                        "Could not parse line %d: %s is not a valid numeric value but was specified as the result",
+                        count,
+                        split[split.length - 1]
+                    );
                     return;
                 }
                 this.featureSet.addFeature(feature);

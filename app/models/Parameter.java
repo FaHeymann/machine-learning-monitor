@@ -4,7 +4,13 @@ import com.avaje.ebean.Model;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
-import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.validation.constraints.NotNull;
 import java.util.Arrays;
 import java.util.List;
@@ -35,7 +41,7 @@ public class Parameter extends Model {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(final int id) {
         this.id = id;
     }
 
@@ -43,7 +49,7 @@ public class Parameter extends Model {
         return name;
     }
 
-    public void setName(String name) {
+    public void setName(final String name) {
         this.name = name;
     }
 
@@ -51,7 +57,7 @@ public class Parameter extends Model {
         return type;
     }
 
-    public void setType(Type type) {
+    public void setType(final Type type) {
         this.type = type;
     }
 
@@ -59,7 +65,7 @@ public class Parameter extends Model {
         return enumValues;
     }
 
-    public void setEnumValues(List<ParameterEnumValue> enumValues) {
+    public void setEnumValues(final List<ParameterEnumValue> enumValues) {
         this.enumValues = enumValues;
     }
 
@@ -67,7 +73,7 @@ public class Parameter extends Model {
         return algorithm;
     }
 
-    public void setAlgorithm(Algorithm algorithm) {
+    public void setAlgorithm(final Algorithm algorithm) {
         this.algorithm = algorithm;
     }
 
@@ -79,7 +85,7 @@ public class Parameter extends Model {
 
         private String type;
 
-        Type(String type) {
+        Type(final String type) {
             this.type = type;
         }
 
@@ -87,11 +93,11 @@ public class Parameter extends Model {
             return type;
         }
 
-        public void setType(String type) {
+        public void setType(final String type) {
             this.type = type;
         }
 
-        public static Type fromString(String text) {
+        public static Type fromString(final String text) {
             return text == null
                 ? null
                 : Arrays.stream(Type.values())
@@ -101,5 +107,6 @@ public class Parameter extends Model {
         }
     }
 
+    @annotations.AllowPublic
     public static Model.Finder<Integer, Parameter> find = new Model.Finder<>(Parameter.class);
 }

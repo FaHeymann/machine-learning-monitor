@@ -13,8 +13,6 @@ export default class ResultsController {
     this.algorithmId = '' + this.algorithms[0].id;
 
     this.fetch();
-
-    this.asd = (muh) => muh.asd;
   }
 
   handleClick(points) {

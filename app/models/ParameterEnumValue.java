@@ -3,7 +3,11 @@ package models;
 import com.avaje.ebean.Model;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotNull;
 
 @Entity
@@ -25,7 +29,7 @@ public class ParameterEnumValue extends Model {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(final int id) {
         this.id = id;
     }
 
@@ -33,7 +37,7 @@ public class ParameterEnumValue extends Model {
         return value;
     }
 
-    public void setValue(String value) {
+    public void setValue(final String value) {
         this.value = value;
     }
 
@@ -41,9 +45,10 @@ public class ParameterEnumValue extends Model {
         return parameter;
     }
 
-    public void setParameter(Parameter parameter) {
+    public void setParameter(final Parameter parameter) {
         this.parameter = parameter;
     }
 
+    @annotations.AllowPublic
     public static Model.Finder<Integer, ParameterEnumValue> find = new Model.Finder<>(ParameterEnumValue.class);
 }

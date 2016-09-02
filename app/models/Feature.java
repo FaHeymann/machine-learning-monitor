@@ -3,9 +3,14 @@ package models;
 import com.avaje.ebean.Model;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 
-import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -33,7 +38,7 @@ public class Feature extends TimestampedModel {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(final int id) {
         this.id = id;
     }
 
@@ -47,7 +52,7 @@ public class Feature extends TimestampedModel {
             .collect(Collectors.toList());
     }
 
-    public void setEntries(List<FeatureEntry> entries) {
+    public void setEntries(final List<FeatureEntry> entries) {
         this.entries = entries;
     }
 
@@ -55,7 +60,7 @@ public class Feature extends TimestampedModel {
         return result;
     }
 
-    public void setResult(double result) {
+    public void setResult(final double result) {
         this.result = result;
     }
 
@@ -63,9 +68,10 @@ public class Feature extends TimestampedModel {
         return featureSet;
     }
 
-    public void setFeatureSet(FeatureSet featureSet) {
+    public void setFeatureSet(final FeatureSet featureSet) {
         this.featureSet = featureSet;
     }
 
-    public static Model.Finder<Integer, Feature> find = new Model.Finder<>(Feature.class);
+    @annotations.AllowPublic
+    public static Model.Find<Integer, Feature> find = new Model.Finder<>(Feature.class);
 }

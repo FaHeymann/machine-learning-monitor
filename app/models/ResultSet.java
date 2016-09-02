@@ -4,7 +4,13 @@ import com.avaje.ebean.Model;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
-import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
@@ -33,7 +39,7 @@ public class ResultSet extends TimestampedModel {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(final int id) {
         this.id = id;
     }
 
@@ -41,7 +47,7 @@ public class ResultSet extends TimestampedModel {
         return featureSet;
     }
 
-    public void setFeatureSet(FeatureSet featureSet) {
+    public void setFeatureSet(final FeatureSet featureSet) {
         this.featureSet = featureSet;
     }
 
@@ -49,7 +55,7 @@ public class ResultSet extends TimestampedModel {
         return algorithm;
     }
 
-    public void setAlgorithm(Algorithm algorithm) {
+    public void setAlgorithm(final Algorithm algorithm) {
         this.algorithm = algorithm;
     }
 
@@ -57,7 +63,7 @@ public class ResultSet extends TimestampedModel {
         return results;
     }
 
-    public void setResults(List<Result> results) {
+    public void setResults(final List<Result> results) {
         this.results = results;
     }
 
@@ -78,26 +84,31 @@ public class ResultSet extends TimestampedModel {
     }
 
     public double get25Quantile() {
-        return this.getQuantile(0.25);
+        final double twentyFivePercent = 0.25;
+        return this.getQuantile(twentyFivePercent);
     }
 
     public double get50Quantile() {
-        return this.getQuantile(0.50);
+        final double fiftyPercent = 0.50;
+        return this.getQuantile(fiftyPercent);
     }
 
     public double get75Quantile() {
-        return this.getQuantile(0.75);
+        final double seventyFivePercent = 0.75;
+        return this.getQuantile(seventyFivePercent);
     }
 
     public double get90Quantile() {
-        return this.getQuantile(0.90);
+        final double ninetyPercent = 0.25;
+        return this.getQuantile(ninetyPercent);
     }
 
     public double get99Quantile() {
-        return this.getQuantile(0.99);
+        final double ninetyNinePercent = 0.25;
+        return this.getQuantile(ninetyNinePercent);
     }
 
-    private double getQuantile(double p) {
+    private double getQuantile(final double p) {
         return this.getResults().stream()
             .mapToDouble(r -> Math.abs(r.getActual() - r.getExpected()))
             .sorted()
@@ -105,5 +116,6 @@ public class ResultSet extends TimestampedModel {
             .reduce((a, b) -> b).orElse(0);
     }
 
+    @annotations.AllowPublic
     public static Model.Finder<Integer, ResultSet> find = new Model.Finder<>(ResultSet.class);
 }

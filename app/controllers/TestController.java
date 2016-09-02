@@ -16,7 +16,7 @@ import play.libs.ws.WSClient;
 import play.mvc.Controller;
 import play.mvc.Result;
 import play.mvc.Security;
-import views.html.tests.*;
+import views.html.tests.run;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,7 +54,7 @@ public class TestController extends Controller {
 
         FeatureSet featureSet = FeatureSet.find.byId(testForm.get().getFeatureSetId());
 
-        if(featureSet == null) {
+        if (featureSet == null) {
             testForm.reject("The featureSet does not exist");
 
             List<FeatureSet> featureSets = FeatureSet.find.all();
@@ -65,7 +65,7 @@ public class TestController extends Controller {
 
         Algorithm algorithm = Algorithm.find.byId(testForm.get().getAlgorithmId());
 
-        if(algorithm == null) {
+        if (algorithm == null) {
             testForm.reject("The algorithm does not exist");
 
             List<FeatureSet> featureSets = FeatureSet.find.all();
@@ -76,7 +76,7 @@ public class TestController extends Controller {
 
         JsonNode labels = Json.toJson(featureSet.getLabels());
         ArrayNode features = Json.newArray();
-        for(Feature feature : featureSet.getFeatures()) {
+        for (Feature feature : featureSet.getFeatures()) {
             ObjectNode featureNode = Json.newObject();
             featureNode.set("result", Json.toJson(feature.getResult()));
             featureNode.set("data", Json.toJson(feature.getEntryStrings()));
@@ -91,7 +91,7 @@ public class TestController extends Controller {
 
             JsonNode response = wsResponse.asJson();
 
-            if(!response.isArray()) {
+            if (!response.isArray()) {
                 return badRequest("Invalid answer format");
             }
 
@@ -103,9 +103,9 @@ public class TestController extends Controller {
 
             List<models.Result> results = new ArrayList<>();
 
-            for(JsonNode current: answers) {
-                if(!current.isObject() || !current.has("actual") || !current.has("expected") ||
-                        !current.get("actual").isDouble() || !current.get("expected").isDouble()) {
+            for (JsonNode current: answers) {
+                if (!current.isObject() || !current.has("actual") || !current.has("expected")
+                    || !current.get("actual").isDouble() || !current.get("expected").isDouble()) {
                     return badRequest("Invalid answer format");
                 }
 
@@ -123,6 +123,9 @@ public class TestController extends Controller {
     }
 
     public Result testAnswer() {
+        final double minValue = 1.0;
+        final double maxValue = 5.0;
+
         JsonNode json = request().body().asJson();
 
         Logger.info(json.asText());
@@ -131,10 +134,10 @@ public class TestController extends Controller {
 
         ObjectNode wrapper = (ObjectNode) json;
         ArrayNode features = (ArrayNode) wrapper.get("features");
-        for(JsonNode node: features) {
+        for (JsonNode node: features) {
             ObjectNode current = Json.newObject();
             current.set("expected", node.get("result"));
-            current.set("actual", Json.toJson(ThreadLocalRandom.current().nextDouble(1.0, 5.0)));
+            current.set("actual", Json.toJson(ThreadLocalRandom.current().nextDouble(minValue, maxValue)));
             result.add(current);
         }
 
@@ -145,14 +148,14 @@ public class TestController extends Controller {
 
     public static class TestData {
 
-        protected Integer featureSetId;
-        protected Integer algorithmId;
+        private Integer featureSetId;
+        private Integer algorithmId;
 
         public Integer getFeatureSetId() {
             return featureSetId;
         }
 
-        public void setFeatureSetId(Integer featureSetId) {
+        public void setFeatureSetId(final Integer featureSetId) {
             this.featureSetId = featureSetId;
         }
 
@@ -160,7 +163,7 @@ public class TestController extends Controller {
             return algorithmId;
         }
 
-        public void setAlgorithmId(Integer algorithmId) {
+        public void setAlgorithmId(final Integer algorithmId) {
             this.algorithmId = algorithmId;
         }
 

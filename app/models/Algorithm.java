@@ -3,7 +3,12 @@ package models;
 import com.avaje.ebean.Model;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
-import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
@@ -41,7 +46,7 @@ public class Algorithm extends TimestampedModel {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(final int id) {
         this.id = id;
     }
 
@@ -49,7 +54,7 @@ public class Algorithm extends TimestampedModel {
         return name;
     }
 
-    public void setName(String name) {
+    public void setName(final String name) {
         this.name = name;
     }
 
@@ -57,7 +62,7 @@ public class Algorithm extends TimestampedModel {
         return description;
     }
 
-    public void setDescription(String description) {
+    public void setDescription(final String description) {
         this.description = description;
     }
 
@@ -65,7 +70,7 @@ public class Algorithm extends TimestampedModel {
         return endpoint;
     }
 
-    public void setEndpoint(String endpoint) {
+    public void setEndpoint(final String endpoint) {
         this.endpoint = endpoint;
     }
 
@@ -73,7 +78,7 @@ public class Algorithm extends TimestampedModel {
         return resultSets;
     }
 
-    public void setResultSets(List<ResultSet> resultSets) {
+    public void setResultSets(final List<ResultSet> resultSets) {
         this.resultSets = resultSets;
     }
 
@@ -81,9 +86,10 @@ public class Algorithm extends TimestampedModel {
         return parameters;
     }
 
-    public void setParameters(List<Parameter> parameters) {
+    public void setParameters(final List<Parameter> parameters) {
         this.parameters = parameters;
     }
 
-    public static Model.Finder<Integer, Algorithm> find = new Model.Finder<>(Algorithm.class);
+    @annotations.AllowPublic
+    public static Model.Find<Integer, Algorithm> find = new Model.Finder<>(Algorithm.class);
 }

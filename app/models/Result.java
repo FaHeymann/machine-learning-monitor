@@ -3,7 +3,11 @@ package models;
 import com.avaje.ebean.Model;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotNull;
 
 @Entity
@@ -28,7 +32,7 @@ public class Result extends TimestampedModel {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(final int id) {
         this.id = id;
     }
 
@@ -36,7 +40,7 @@ public class Result extends TimestampedModel {
         return expected;
     }
 
-    public void setExpected(double expected) {
+    public void setExpected(final double expected) {
         this.expected = expected;
     }
 
@@ -44,7 +48,7 @@ public class Result extends TimestampedModel {
         return actual;
     }
 
-    public void setActual(double actual) {
+    public void setActual(final double actual) {
         this.actual = actual;
     }
 
@@ -52,10 +56,11 @@ public class Result extends TimestampedModel {
         return resultSet;
     }
 
-    public void setResultSet(ResultSet resultSet) {
+    public void setResultSet(final ResultSet resultSet) {
         this.resultSet = resultSet;
     }
 
+    @annotations.AllowPublic
     public static Model.Finder<Integer, Result> find = new Model.Finder<>(Result.class);
 }
 

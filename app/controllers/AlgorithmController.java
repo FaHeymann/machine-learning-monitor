@@ -23,20 +23,20 @@ public class AlgorithmController extends Controller {
     private FormFactory formFactory;
 
     @Security.Authenticated(Secured.class)
-    public final Result list() {
+    public Result list() {
         List<Algorithm> algorithms = Algorithm.find.all();
 
         return ok(list.render(algorithms));
     }
 
     @Security.Authenticated(Secured.class)
-    public final Result create() {
+    public Result create() {
         return ok(create.render());
     }
 
     @Security.Authenticated(Secured.class)
     @BodyParser.Of(BodyParser.Json.class)
-    public final Result save() {
+    public Result save() {
 
         Form<AlgorithmData> algorithmForm = formFactory.form(AlgorithmData.class).bindFromRequest();
 
@@ -75,7 +75,7 @@ public class AlgorithmController extends Controller {
     }
 
     @Security.Authenticated(Secured.class)
-    public final Result detail(final int algorithmId) {
+    public Result detail(final int algorithmId) {
         Algorithm algorithm = Algorithm.find.byId(algorithmId);
 
         return ok(detail.render(algorithm));
@@ -88,39 +88,39 @@ public class AlgorithmController extends Controller {
         private String endpoint;
         private List<ParameterData> parameters;
 
-        public final String getName() {
+        public String getName() {
             return name;
         }
 
-        public final void setName(final String name) {
+        public void setName(final String name) {
             this.name = name;
         }
 
-        public final String getDescription() {
+        public String getDescription() {
             return description;
         }
 
-        public final void setDescription(final String description) {
+        public void setDescription(final String description) {
             this.description = description;
         }
 
-        public final String getEndpoint() {
+        public String getEndpoint() {
             return endpoint;
         }
 
-        public final void setEndpoint(final String endpoint) {
+        public void setEndpoint(final String endpoint) {
             this.endpoint = endpoint;
         }
 
-        public final List<ParameterData> getParameters() {
+        public List<ParameterData> getParameters() {
             return parameters;
         }
 
-        public final void setParameters(final List<ParameterData> parameters) {
+        public void setParameters(final List<ParameterData> parameters) {
             this.parameters = parameters;
         }
 
-        public final String validate() {
+        public String validate() {
 
             if (name == null || name.equals("")) {
                 return "Name must not be empty";
@@ -150,31 +150,31 @@ public class AlgorithmController extends Controller {
         private Parameter.Type type;
         private List<String> enumValues;
 
-        public final String getName() {
+        public String getName() {
             return name;
         }
 
-        public final void setName(final String name) {
+        public void setName(final String name) {
             this.name = name;
         }
 
-        public final Parameter.Type getType() {
+        public Parameter.Type getType() {
             return type;
         }
 
-        public final void setType(final String type) {
+        public void setType(final String type) {
             this.type = Parameter.Type.fromString(type);
         }
 
-        public final List<String> getEnumValues() {
+        public List<String> getEnumValues() {
             return enumValues;
         }
 
-        public final void setEnumValues(final List<String> enumValues) {
+        public void setEnumValues(final List<String> enumValues) {
             this.enumValues = enumValues;
         }
 
-        public final String validate() {
+        public String validate() {
             if (name == null || name.equals("")) {
                 return "Parameter name must not be empty";
             }
