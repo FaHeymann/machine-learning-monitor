@@ -11,7 +11,8 @@ dependencies:
     - sbt ++$TRAVIS_SCALA_VERSION compile
 
 test:
-  - sbt ++$TRAVIS_SCALA_VERSION test
-  - sbt ++$TRAVIS_SCALA_VERSION checkstyle
-#  - sbt ++$TRAVIS_SCALA_VERSION test:checkstyle
-  - npm run test
+  override:
+    - sbt ++$TRAVIS_SCALA_VERSION test
+    - sbt ++$TRAVIS_SCALA_VERSION checkstyle
+#   - sbt ++$TRAVIS_SCALA_VERSION test:checkstyle
+    - npm run test
