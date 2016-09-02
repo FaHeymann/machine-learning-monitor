@@ -5,6 +5,6 @@ scala:
 before-script:
 - npm install
 script:
-- activator test
-- 'activator test:checkstyle'
+- ./activator test
+- './activator test:checkstyle'
 - npm run eslint
