@@ -4,7 +4,7 @@ scala:
   - 2.11.7
 
 env:
-  - PLAY_VERSION=2.5.0
+  - PLAY_VERSION=2.5.3
 
 before-script:
   - npm install
