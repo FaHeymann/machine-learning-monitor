@@ -91,5 +91,5 @@ public class Algorithm extends TimestampedModel {
     }
 
     @annotations.AllowPublic
-    public static Model.Find<Integer, Algorithm> find = new Model.Finder<>(Algorithm.class);
+    public static Model.Finder<Integer, Algorithm> find = new Model.Finder<>(Algorithm.class);
 }

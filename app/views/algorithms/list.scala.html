@@ -1,7 +1,6 @@
 @(algorithms: List[Algorithm])
 
 @main("Algorithms") {
-
     <div class="row">
         <div class="col-sm-6">
 
@@ -25,10 +24,10 @@
         <tbody>
             @for(algorithm <- algorithms) {
                 <tr>
-                    <td>@algorithm.getId()</td>
-                    <td>@algorithm.getName()</td>
-                    <td>@algorithm.getDescription()</td>
-                    <td>@algorithm.getEndpoint()</td>
+                    <td>@algorithm.getId</td>
+                    <td>@algorithm.getName</td>
+                    <td>@algorithm.getDescription</td>
+                    <td>@algorithm.getEndpoint</td>
                     <td>
                         <a class="btn btn-xs btn-success" href="@routes.AlgorithmController.detail(algorithm.getId())">View</a>
                     </td>

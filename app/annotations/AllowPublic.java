@@ -1,4 +1,3 @@
 package annotations;
 
-public @interface AllowPublic {
-}
+public @interface AllowPublic {}

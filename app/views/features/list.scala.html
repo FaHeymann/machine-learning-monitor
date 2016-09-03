@@ -24,9 +24,9 @@
         <tbody>
         @for(featureSet <- featureSets) {
             <tr>
-                <td>@featureSet.getId()</td>
-                <td>@featureSet.getName()</td>
-                <td>@featureSet.getDescription()</td>
+                <td>@featureSet.getId</td>
+                <td>@featureSet.getName</td>
+                <td>@featureSet.getDescription</td>
                 <td>
                     <a class="btn btn-xs btn-success" href="@routes.FeatureController.detail(featureSet.getId())">View</a>
                 </td>

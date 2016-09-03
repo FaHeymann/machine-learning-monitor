@@ -16,7 +16,7 @@ libraryDependencies ++= Seq(
   "mysql" % "mysql-connector-java" % "5.1.36",
   "org.mindrot" % "jbcrypt" % "0.3m",
 
-  //assets
+  // assets
   "org.webjars" % "bootstrap" % "3.1.1-2",
   "org.webjars" % "font-awesome" % "4.6.1",
   "org.webjars" % "angularjs" % "1.5.0",
