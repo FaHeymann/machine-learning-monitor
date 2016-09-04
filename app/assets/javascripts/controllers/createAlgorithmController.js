@@ -3,12 +3,13 @@ export default class CreateAlgorithmController {
     this.$http = $http;
     this.$window = $window;
 
+    this.status = 'initial';
+    this.error = '';
+
     this.parameters = [];
     this.name = '';
     this.description = '';
     this.endpoint = '';
-    this.status = 'initial';
-    this.error = '';
   }
 
   addRow() {

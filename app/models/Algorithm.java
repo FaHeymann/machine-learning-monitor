@@ -1,6 +1,7 @@
 package models;
 
 import com.avaje.ebean.Model;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.CascadeType;
@@ -30,7 +31,7 @@ public class Algorithm extends TimestampedModel {
     private String endpoint;
 
     @OneToMany
-    @JsonManagedReference
+    @JsonIgnore
     private List<ResultSet> resultSets;
 
     @OneToMany(cascade = CascadeType.ALL)

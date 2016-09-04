@@ -1,0 +1,99 @@
+<p class="text-danger" data-ng-hide="$ctrl.error == ''">{{ $ctrl.error }}</p>
+<div data-ng-hide="$ctrl.lastResultSetId == 0" class="alert alert-success" role="alert">
+  Test successful! See Results <a href="/results/{{ $ctrl.lastResultSetId }}">here</a>.
+</div>
+<form class="form-horizontal">
+  <div class="row">
+    <div class="col-sm-6">
+      <div class="form-group">
+        <div class="col-sm-10 col-sm-offset-2">
+          <h4>Algorithm</h4>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="algorithm" class="col-sm-2 control-label">Algorithm</label>
+        <div class="col-sm-10">
+          <select id="algorithm" class="form-control" data-ng-model="$ctrl.algorithmId" data-ng-change="$ctrl.initParameters()">
+            <option data-ng-repeat="algorithm in $ctrl.algorithms" value="{{ algorithm.id }}">
+              {{ algorithm.name }}
+            </option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="col-sm-10 col-sm-offset-2">
+          <h4 data-ng-show="$ctrl.parameters.length">Parameters</h4>
+        </div>
+      </div>
+      <div data-ng-repeat="parameter in $ctrl.parameters" class="form-group">
+        <label for="p{{ $label }}" class="col-sm-2 control-label">{{ parameter.name }} ({{ parameter.type | lowercase }})</label>
+        <div class="col-sm-10">
+          <input
+            data-ng-if="parameter.type == 'STRING'"
+            data-ng-model="parameter.value"
+            type="text" id="p{{ $label }}"
+            placeholder="Parameter &quot;{{ parameter.name }}&quot;"
+            class="form-control">
+          <input
+            data-ng-if="parameter.type == 'INT'"
+            data-ng-model="parameter.value"
+            type="text" id="p{{ $label }}"
+            placeholder="Parameter &quot;{{ parameter.name }}&quot;"
+            class="form-control"
+            data-format-int>
+          <input
+            data-ng-if="parameter.type == 'DOUBLE'"
+            data-ng-model="parameter.value"
+            type="text" id="p{{ $label }}"
+            placeholder="Parameter &quot;{{ parameter.name }}&quot;"
+            class="form-control"
+            data-format-double>
+          <select data-ng-if="parameter.type == 'ENUM'" data-ng-model="parameter.value" id="p{{ $label }}" class="form-control">
+            <option data-ng-repeat="enumValue in parameter.enumValues" value="{{ enumValue.value }}">
+              {{ enumValue.value }}
+            </option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-6">
+      <div class="form-group">
+        <div class="col-sm-10 col-sm-offset-2">
+          <h4>Feature Set</h4>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="featureSet" class="col-sm-2 control-label">Feature Set</label>
+        <div class="col-sm-10">
+          <select id="featureSet" class="form-control" data-ng-model="$ctrl.featureSetId" data-ng-change="$ctrl.initLabels()">
+            <option data-ng-repeat="featureSet in $ctrl.featureSets" value="{{ featureSet.id }}">
+              {{ featureSet.name }}
+            </option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="col-sm-10 col-sm-offset-2">
+          <h4>Included Labels</h4>
+        </div>
+      </div>
+      <div data-ng-repeat="label in $ctrl.labels" class="form-group">
+        <div class="col-sm-offset-2 col-sm-10">
+          <div class="checkbox">
+            <label>
+              <input type="checkbox" data-ng-model="label.include"> Include <b>{{ label.label }}</b>
+            </label>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="form-group">
+    <div class="col-sm-11 col-sm-offset-1">
+      <button class="btn btn-primary" type="button" data-ng-click="$ctrl.submit()" data-ng-disabled="$ctrl.status == 'submitting'">
+        Run Test
+        <i data-ng-show="$ctrl.status == 'submitting'" class="fa fa-spinner fa-spin"></i>
+      </button>
+    </div>
+  </div>
+</form>

@@ -13,6 +13,7 @@ import play.data.Form;
 import play.data.FormFactory;
 import play.libs.Json;
 import play.libs.ws.WSClient;
+import play.mvc.BodyParser;
 import play.mvc.Controller;
 import play.mvc.Result;
 import play.mvc.Security;
@@ -23,6 +24,7 @@ import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.stream.Collectors;
 
 public class TestController extends Controller {
 
@@ -37,41 +39,32 @@ public class TestController extends Controller {
         List<FeatureSet> featureSets = FeatureSet.find.all();
         List<Algorithm> algorithms = Algorithm.find.all();
 
-        return ok(run.render(formFactory.form(TestData.class), featureSets, algorithms));
+        return ok(run.render(Json.toJson(featureSets).toString(), Json.toJson(algorithms).toString()));
     }
 
     @Security.Authenticated(Secured.class)
+    @BodyParser.Of(BodyParser.Json.class)
     public CompletionStage<Result> run() {
-
         Form<TestData> testForm = formFactory.form(TestData.class).bindFromRequest();
 
         if (testForm.hasErrors()) {
-            List<FeatureSet> featureSets = FeatureSet.find.all();
-            List<Algorithm> algorithms = Algorithm.find.all();
-
-            return CompletableFuture.supplyAsync(() -> badRequest(run.render(testForm, featureSets, algorithms)));
+            return CompletableFuture.supplyAsync(() -> badRequest(testForm.errorsAsJson()));
         }
 
         FeatureSet featureSet = FeatureSet.find.byId(testForm.get().getFeatureSetId());
 
         if (featureSet == null) {
-            testForm.reject("The featureSet does not exist");
-
-            List<FeatureSet> featureSets = FeatureSet.find.all();
-            List<Algorithm> algorithms = Algorithm.find.all();
-
-            return CompletableFuture.supplyAsync(() -> badRequest(run.render(testForm, featureSets, algorithms)));
+            ObjectNode response = Json.newObject();
+            response.set("error", Json.toJson("The featureSet does not exist"));
+            return CompletableFuture.supplyAsync(() -> badRequest(response));
         }
 
         Algorithm algorithm = Algorithm.find.byId(testForm.get().getAlgorithmId());
 
         if (algorithm == null) {
-            testForm.reject("The algorithm does not exist");
-
-            List<FeatureSet> featureSets = FeatureSet.find.all();
-            List<Algorithm> algorithms = Algorithm.find.all();
-
-            return CompletableFuture.supplyAsync(() -> badRequest(run.render(testForm, featureSets, algorithms)));
+            ObjectNode response = Json.newObject();
+            response.set("error", Json.toJson("The algorithm does not exist"));
+            return CompletableFuture.supplyAsync(() -> badRequest(response));
         }
 
         JsonNode labels = Json.toJson(featureSet.getLabels());
@@ -84,8 +77,22 @@ public class TestController extends Controller {
         }
 
         ObjectNode wrapper = Json.newObject();
-        wrapper.set("labels", labels);
+        wrapper.set("allLabels", labels);
+        wrapper.set("excludeLabels",
+            testForm.get().getExcludeLabels() == null
+            ? Json.newArray()
+            : Json.toJson(testForm.get().getExcludeLabels())
+
+        );
         wrapper.set("features", features);
+        wrapper.set("parameters",
+            testForm.get().getParameters() == null
+            ? Json.newObject()
+            : Json.toJson(
+                testForm.get().getParameters().stream()
+                    .collect(Collectors.toMap(Parameter::getName, Parameter::getValue))
+            )
+        );
 
         return ws.url(algorithm.getEndpoint()).post(wrapper).thenApply(wsResponse -> {
 
@@ -118,7 +125,7 @@ public class TestController extends Controller {
             resultSet.setResults(results);
             resultSet.save();
 
-            return redirect(routes.TestController.create());
+            return ok(Json.newObject().set("id", Json.toJson(resultSet.getId())));
         });
     }
 
@@ -129,6 +136,8 @@ public class TestController extends Controller {
         JsonNode json = request().body().asJson();
 
         Logger.info(json.asText());
+
+        System.out.println(json.toString());
 
         ArrayNode result = Json.newArray();
 
@@ -150,6 +159,8 @@ public class TestController extends Controller {
 
         private Integer featureSetId;
         private Integer algorithmId;
+        private List<String> excludeLabels;
+        private List<Parameter> parameters;
 
         public Integer getFeatureSetId() {
             return featureSetId;
@@ -167,6 +178,22 @@ public class TestController extends Controller {
             this.algorithmId = algorithmId;
         }
 
+        public List<String> getExcludeLabels() {
+            return excludeLabels;
+        }
+
+        public void setExcludeLabels(final List<String> excludeLabels) {
+            this.excludeLabels = excludeLabels;
+        }
+
+        public List<Parameter> getParameters() {
+            return parameters;
+        }
+
+        public void setParameters(final List<Parameter> parameters) {
+            this.parameters = parameters;
+        }
+
         public String validate() {
 
             if (featureSetId == null) {
@@ -175,7 +202,47 @@ public class TestController extends Controller {
             if (algorithmId == null) {
                 return "You must select an algorithm";
             }
+
             return null;
+        }
+    }
+
+    public static class Parameter {
+        private int id;
+        private String type;
+        private String name;
+        private String value;
+
+        public int getId() {
+            return id;
+        }
+
+        public void setId(final int id) {
+            this.id = id;
+        }
+
+        public String getType() {
+            return type;
+        }
+
+        public void setType(final String type) {
+            this.type = type;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public void setName(final String name) {
+            this.name = name;
+        }
+
+        public String getValue() {
+            return value;
+        }
+
+        public void setValue(final String value) {
+            this.value = value;
         }
     }
 
