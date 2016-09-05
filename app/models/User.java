@@ -34,8 +34,8 @@ public class User extends TimestampedModel {
     private List<FeatureSet> featureSets;
 
     public User(final String email, final String name, final String password) {
-        this.email = email;
-        this.name = name;
+        this.setEmail(email);
+        this.setName(name);
         this.setPassword(password);
     }
 

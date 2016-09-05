@@ -2,6 +2,7 @@ package models;
 
 import com.avaje.ebean.Model;
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.CascadeType;
@@ -16,7 +17,7 @@ import java.util.Arrays;
 import java.util.List;
 
 @Entity
-public class Parameter extends Model {
+public class Parameter extends TimestampedModel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -36,6 +37,10 @@ public class Parameter extends Model {
     @NotNull
     @JsonBackReference
     private Algorithm algorithm;
+
+    @OneToMany(cascade = CascadeType.ALL)
+    @JsonIgnore
+    private List<ParameterTestValue> parameterTestValues;
 
     public int getId() {
         return id;
@@ -75,6 +80,14 @@ public class Parameter extends Model {
 
     public void setAlgorithm(final Algorithm algorithm) {
         this.algorithm = algorithm;
+    }
+
+    public List<ParameterTestValue> getParameterTestValues() {
+        return parameterTestValues;
+    }
+
+    public void setParameterTestValues(final List<ParameterTestValue> parameterTestValues) {
+        this.parameterTestValues = parameterTestValues;
     }
 
     public enum Type {

@@ -38,7 +38,7 @@ public class FeatureSet extends TimestampedModel {
     private List<Feature> features;
 
     @OneToMany
-    @JsonManagedReference
+    @JsonIgnore
     private List<ResultSet> resultSets;
 
     @ManyToOne

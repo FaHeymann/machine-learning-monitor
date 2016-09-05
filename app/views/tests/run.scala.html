@@ -1,47 +1,10 @@
-@(form: Form[TestController.TestData], featureSets: List[FeatureSet], algorithms: List[Algorithm])
+@(featureSets: String, algorithms: String)
 
 @main("Run Test") {
-    @helper.form(routes.TestController.run(), 'class -> "form-horizontal") {
-        <div class="row">
-            <div class="col-sm-6">
-                <div class="form-group">
-                    <div class="col-sm-10 col-sm-offset-2">
-                        <h3>Run Test</h3>
-
-                        @if(form.hasGlobalErrors) {
-                        <p class="error">
-                            @form.globalError.message
-                        </p>
-                        }
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label for="featureSet" class="col-sm-2 control-label">Feature Set</label>
-                    <div class="col-sm-10">
-                        <select id="featureSet" class="form-control" name="featureSetId">
-                            @for(featureSet <- featureSets) {
-                                <option value="@featureSet.getId()">@featureSet.getName()</option>
-                            }
-                        </select>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="algorithm" class="col-sm-2 control-label">Algorithm</label>
-                    <div class="col-sm-10">
-                        <select id="algorithm" class="form-control" name="algorithmId">
-                            @for(algorithm <- algorithms) {
-                                <option value="@algorithm.getId()">@algorithm.getName()</option>
-                            }
-                        </select>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <div class="col-sm-10 col-sm-offset-2">
-                        <button class="btn btn-primary" type="submit">Run Test</button>
-                    </div>
-                </div>
-            </div>
+    <div class="row">
+        <div class="col-sm-11 col-sm-offset-1">
+            <h3>Run Simple Test</h3>
         </div>
-    }
+    </div>
+    <run-test data-algorithms="@algorithms" data-feature-sets="@featureSets"></run-test>
 }

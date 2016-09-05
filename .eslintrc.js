@@ -1,5 +1,5 @@
 module.exports = {
-  extends: 'airbnb',
+  extends: 'airbnb/base',
   rules: {
     'prefer-template': 'off',
     'consistent-return': 'error',

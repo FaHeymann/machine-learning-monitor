@@ -73,5 +73,5 @@ public class Feature extends TimestampedModel {
     }
 
     @annotations.AllowPublic
-    public static Model.Find<Integer, Feature> find = new Model.Finder<>(Feature.class);
+    public static Model.Finder<Integer, Feature> find = new Model.Finder<>(Feature.class);
 }
