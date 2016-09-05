@@ -4,7 +4,7 @@ import CreateAlgorithmEnumController from './controllers/createAlgorithmEnumCont
 import RunTestController from './controllers/runTestController';
 
 // eslint-disable-next-line no-undef
-angular.module('machine-learning-monitor', ['chart.js', 'ui.bootstrap'])
+angular.module('machine-learning-monitor', ['chart.js', 'ui.bootstrap', 'ui.multiselect'])
 
 .component('results', {
   controller: ResultsController,
