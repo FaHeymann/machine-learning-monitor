@@ -1,6 +1,6 @@
 name := """machine-learning-monitor"""
-
-version := "1.0-SNAPSHOT"
+description := """Development support for machine learning projects"""
+version := "0.0.1"
 
 lazy val root = (project in file(".")).enablePlugins(PlayJava, PlayEbean)
 
