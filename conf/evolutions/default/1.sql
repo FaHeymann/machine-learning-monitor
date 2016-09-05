@@ -27,6 +27,8 @@ create table feature_entry (
   feature_id                    integer not null,
   feature_label_id              integer not null,
   value                         varchar(255) not null,
+  created_at                    datetime(6) not null,
+  updated_at                    datetime(6) not null,
   constraint pk_feature_entry primary key (id)
 );
 
@@ -34,6 +36,8 @@ create table feature_label (
   id                            integer auto_increment not null,
   feature_set_id                integer not null,
   value                         varchar(255) not null,
+  created_at                    datetime(6) not null,
+  updated_at                    datetime(6) not null,
   constraint pk_feature_label primary key (id)
 );
 
@@ -52,6 +56,8 @@ create table parameter (
   name                          varchar(255) not null,
   type                          integer not null,
   algorithm_id                  integer not null,
+  created_at                    datetime(6) not null,
+  updated_at                    datetime(6) not null,
   constraint ck_parameter_type check (type in (0,1,2,3)),
   constraint pk_parameter primary key (id)
 );
@@ -60,7 +66,22 @@ create table parameter_enum_value (
   id                            integer auto_increment not null,
   value                         varchar(255) not null,
   parameter_id                  integer not null,
+  created_at                    datetime(6) not null,
+  updated_at                    datetime(6) not null,
   constraint pk_parameter_enum_value primary key (id)
+);
+
+create table parameter_test_value (
+  id                            integer auto_increment not null,
+  result_set_id                 integer not null,
+  parameter_id                  integer not null,
+  string_value                  varchar(255),
+  int_value                     integer,
+  double_value                  double,
+  enum_value_id                 integer,
+  created_at                    datetime(6) not null,
+  updated_at                    datetime(6) not null,
+  constraint pk_parameter_test_value primary key (id)
 );
 
 create table result (
@@ -77,9 +98,17 @@ create table result_set (
   id                            integer auto_increment not null,
   feature_set_id                integer not null,
   algorithm_id                  integer not null,
+  test_matrix_id                integer,
   created_at                    datetime(6) not null,
   updated_at                    datetime(6) not null,
   constraint pk_result_set primary key (id)
+);
+
+create table test_matrix (
+  id                            integer auto_increment not null,
+  created_at                    datetime(6) not null,
+  updated_at                    datetime(6) not null,
+  constraint pk_test_matrix primary key (id)
 );
 
 create table user (
@@ -114,6 +143,15 @@ create index ix_parameter_algorithm_id on parameter (algorithm_id);
 alter table parameter_enum_value add constraint fk_parameter_enum_value_parameter_id foreign key (parameter_id) references parameter (id) on delete restrict on update restrict;
 create index ix_parameter_enum_value_parameter_id on parameter_enum_value (parameter_id);
 
+alter table parameter_test_value add constraint fk_parameter_test_value_result_set_id foreign key (result_set_id) references result_set (id) on delete restrict on update restrict;
+create index ix_parameter_test_value_result_set_id on parameter_test_value (result_set_id);
+
+alter table parameter_test_value add constraint fk_parameter_test_value_parameter_id foreign key (parameter_id) references parameter (id) on delete restrict on update restrict;
+create index ix_parameter_test_value_parameter_id on parameter_test_value (parameter_id);
+
+alter table parameter_test_value add constraint fk_parameter_test_value_enum_value_id foreign key (enum_value_id) references parameter_enum_value (id) on delete restrict on update restrict;
+create index ix_parameter_test_value_enum_value_id on parameter_test_value (enum_value_id);
+
 alter table result add constraint fk_result_result_set_id foreign key (result_set_id) references result_set (id) on delete restrict on update restrict;
 create index ix_result_result_set_id on result (result_set_id);
 
@@ -122,6 +160,9 @@ create index ix_result_set_feature_set_id on result_set (feature_set_id);
 
 alter table result_set add constraint fk_result_set_algorithm_id foreign key (algorithm_id) references algorithm (id) on delete restrict on update restrict;
 create index ix_result_set_algorithm_id on result_set (algorithm_id);
+
+alter table result_set add constraint fk_result_set_test_matrix_id foreign key (test_matrix_id) references test_matrix (id) on delete restrict on update restrict;
+create index ix_result_set_test_matrix_id on result_set (test_matrix_id);
 
 
 # --- !Downs
@@ -147,6 +188,15 @@ drop index ix_parameter_algorithm_id on parameter;
 alter table parameter_enum_value drop foreign key fk_parameter_enum_value_parameter_id;
 drop index ix_parameter_enum_value_parameter_id on parameter_enum_value;
 
+alter table parameter_test_value drop foreign key fk_parameter_test_value_result_set_id;
+drop index ix_parameter_test_value_result_set_id on parameter_test_value;
+
+alter table parameter_test_value drop foreign key fk_parameter_test_value_parameter_id;
+drop index ix_parameter_test_value_parameter_id on parameter_test_value;
+
+alter table parameter_test_value drop foreign key fk_parameter_test_value_enum_value_id;
+drop index ix_parameter_test_value_enum_value_id on parameter_test_value;
+
 alter table result drop foreign key fk_result_result_set_id;
 drop index ix_result_result_set_id on result;
 
@@ -155,6 +205,9 @@ drop index ix_result_set_feature_set_id on result_set;
 
 alter table result_set drop foreign key fk_result_set_algorithm_id;
 drop index ix_result_set_algorithm_id on result_set;
+
+alter table result_set drop foreign key fk_result_set_test_matrix_id;
+drop index ix_result_set_test_matrix_id on result_set;
 
 drop table if exists algorithm;
 
@@ -170,9 +223,13 @@ drop table if exists parameter;
 
 drop table if exists parameter_enum_value;
 
+drop table if exists parameter_test_value;
+
 drop table if exists result;
 
 drop table if exists result_set;
+
+drop table if exists test_matrix;
 
 drop table if exists user;
 

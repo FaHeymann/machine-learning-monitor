@@ -31,6 +31,14 @@ public class ResultSet extends TimestampedModel {
     @JsonBackReference
     private Algorithm algorithm;
 
+    @ManyToOne
+    @JsonBackReference
+    private TestMatrix testMatrix;
+
+    @OneToMany(cascade = CascadeType.ALL)
+    @JsonManagedReference
+    private List<ParameterTestValue> parameterTestValues;
+
     @OneToMany(cascade = CascadeType.ALL)
     @JsonManagedReference
     private List<Result> results;
@@ -57,6 +65,22 @@ public class ResultSet extends TimestampedModel {
 
     public void setAlgorithm(final Algorithm algorithm) {
         this.algorithm = algorithm;
+    }
+
+    public TestMatrix getTestMatrix() {
+        return testMatrix;
+    }
+
+    public void setTestMatrix(final TestMatrix testMatrix) {
+        this.testMatrix = testMatrix;
+    }
+
+    public List<ParameterTestValue> getParameterTestValues() {
+        return parameterTestValues;
+    }
+
+    public void setParameterTestValues(final List<ParameterTestValue> parameterTestValues) {
+        this.parameterTestValues = parameterTestValues;
     }
 
     public List<Result> getResults() {

@@ -56,10 +56,9 @@ export default class RunTestController {
     };
 
     this.$http.post('/tests/run', body)
-      .then((response) => {
+      .then(response => {
         this.lastResultSetId = response.data.id;
-
-        console.log(response);
+        this.status = 'initial';
       }, response => {
         try {
           this.error = response.data[''][0];

@@ -43,7 +43,12 @@ export default class ResultsController {
     this.$http.get('/results/search/' + this.featureSetId + '/' + this.algorithmId)
       .then(response => {
         this.data = response.data;
-        this.chartLabels = this.data.map(entry => entry.createdAt);
+        this.chartLabels = this.data.map(entry =>
+          [entry.createdAt].concat(
+            entry.parameterTestValues.map(
+              ptv => ptv.parameter.name + ': ' + ptv.valueAsString
+            )
+          ));
         this.update();
       });
   }

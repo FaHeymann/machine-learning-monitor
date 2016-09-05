@@ -7,6 +7,7 @@ import com.google.inject.Inject;
 import models.Algorithm;
 import models.Feature;
 import models.FeatureSet;
+import models.ParameterTestValue;
 import models.ResultSet;
 import play.Logger;
 import play.data.Form;
@@ -46,13 +47,11 @@ public class TestController extends Controller {
     @BodyParser.Of(BodyParser.Json.class)
     public CompletionStage<Result> run() {
         Form<TestData> testForm = formFactory.form(TestData.class).bindFromRequest();
-
         if (testForm.hasErrors()) {
             return CompletableFuture.supplyAsync(() -> badRequest(testForm.errorsAsJson()));
         }
 
         FeatureSet featureSet = FeatureSet.find.byId(testForm.get().getFeatureSetId());
-
         if (featureSet == null) {
             ObjectNode response = Json.newObject();
             response.set("error", Json.toJson("The featureSet does not exist"));
@@ -60,38 +59,29 @@ public class TestController extends Controller {
         }
 
         Algorithm algorithm = Algorithm.find.byId(testForm.get().getAlgorithmId());
-
         if (algorithm == null) {
             ObjectNode response = Json.newObject();
             response.set("error", Json.toJson("The algorithm does not exist"));
             return CompletableFuture.supplyAsync(() -> badRequest(response));
         }
 
-        JsonNode labels = Json.toJson(featureSet.getLabels());
-        ArrayNode features = Json.newArray();
-        for (Feature feature : featureSet.getFeatures()) {
-            ObjectNode featureNode = Json.newObject();
-            featureNode.set("result", Json.toJson(feature.getResult()));
-            featureNode.set("data", Json.toJson(feature.getEntryStrings()));
-            features.add(featureNode);
-        }
+        ObjectNode wrapper = this.assembleRequestBody(testForm, featureSet);
 
-        ObjectNode wrapper = Json.newObject();
-        wrapper.set("allLabels", labels);
-        wrapper.set("excludeLabels",
-            testForm.get().getExcludeLabels() == null
-            ? Json.newArray()
-            : Json.toJson(testForm.get().getExcludeLabels())
-
-        );
-        wrapper.set("features", features);
-        wrapper.set("parameters",
-            testForm.get().getParameters() == null
-            ? Json.newObject()
-            : Json.toJson(
-                testForm.get().getParameters().stream()
-                    .collect(Collectors.toMap(Parameter::getName, Parameter::getValue))
+        ResultSet resultSet = new ResultSet();
+        resultSet.setFeatureSet(featureSet);
+        resultSet.setAlgorithm(algorithm);
+        resultSet.setParameterTestValues(
+            testForm.get().getParameters().stream()
+            .map(
+                p -> new ParameterTestValue(
+                    algorithm.getParameters().stream()
+                        .filter(d -> d.getId() == p.getId())
+                        .findFirst()
+                        .orElseThrow(AssertionError::new),
+                    p.getValue()
+                )
             )
+            .collect(Collectors.toList())
         );
 
         return ws.url(algorithm.getEndpoint()).post(wrapper).thenApply(wsResponse -> {
@@ -104,16 +94,15 @@ public class TestController extends Controller {
 
             ArrayNode answers = (ArrayNode) response;
 
-            ResultSet resultSet = new ResultSet();
-            resultSet.setFeatureSet(featureSet);
-            resultSet.setAlgorithm(algorithm);
-
             List<models.Result> results = new ArrayList<>();
 
             for (JsonNode current: answers) {
-                if (!current.isObject() || !current.has("actual") || !current.has("expected")
-                    || !current.get("actual").isDouble() || !current.get("expected").isDouble()) {
-                    return badRequest("Invalid answer format");
+                if (!current.isObject()
+                    || !current.has("actual")
+                    || !current.has("expected")
+                    || !current.get("actual").isDouble()
+                    || !current.get("expected").isDouble()) {
+                        return badRequest("Invalid answer format");
                 }
 
                 models.Result result = new models.Result();
@@ -129,6 +118,37 @@ public class TestController extends Controller {
         });
     }
 
+    private ObjectNode assembleRequestBody(final Form<TestData> testForm, final FeatureSet featureSet) {
+        JsonNode labels = Json.toJson(featureSet.getLabels());
+        ArrayNode features = Json.newArray();
+        for (Feature feature : featureSet.getFeatures()) {
+            ObjectNode featureNode = Json.newObject();
+            featureNode.set("result", Json.toJson(feature.getResult()));
+            featureNode.set("data", Json.toJson(feature.getEntryStrings()));
+            features.add(featureNode);
+        }
+
+        ObjectNode wrapper = Json.newObject();
+        wrapper.set("allLabels", labels);
+        wrapper.set("excludeLabels",
+            testForm.get().getExcludeLabels() == null
+                ? Json.newArray()
+                : Json.toJson(testForm.get().getExcludeLabels())
+
+        );
+        wrapper.set("features", features);
+        wrapper.set("parameters",
+            testForm.get().getParameters() == null
+                ? Json.newObject()
+                : Json.toJson(
+                testForm.get().getParameters().stream()
+                    .collect(Collectors.toMap(Parameter::getName, Parameter::getValue))
+            )
+        );
+
+        return wrapper;
+    }
+
     public Result testAnswer() {
         final double minValue = 1.0;
         final double maxValue = 5.0;
@@ -137,7 +157,7 @@ public class TestController extends Controller {
 
         Logger.info(json.asText());
 
-        System.out.println(json.toString());
+//        System.out.println(json.toString());
 
         ArrayNode result = Json.newArray();
 
