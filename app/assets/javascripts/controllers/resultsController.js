@@ -3,12 +3,6 @@ export default class ResultsController {
     this.$http = $http;
     this.$window = $window;
 
-    this.metrics = [{ value: 'maxDeviation' }];
-    this.chartData = [[]];
-    this.chartLabels = [];
-    this.chartSeries = [];
-    this.chartOptions = {};
-
     this.metricOptions = [
       {
         value: 'maxDeviation',
@@ -37,8 +31,14 @@ export default class ResultsController {
       },
     ];
 
-    this.featureSetId = '' + this.featureSets[0].id;
-    this.algorithmId = '' + this.algorithms[0].id;
+    this.metrics = [this.metricOptions[0]];
+    this.chartData = [[]];
+    this.chartLabels = [];
+    this.chartSeries = [];
+    this.chartOptions = {};
+
+    this.featureSetId = this.featureSets.length ? '' + this.featureSets[0].id : '';
+    this.algorithmId = this.featureSets.length ? '' + this.algorithms[0].id : '';
 
     this.fetch();
   }
@@ -56,8 +56,10 @@ export default class ResultsController {
 
   assignMetrics(metrics) {
     this.chartData = [];
+    this.chartSeries = [];
     metrics.forEach(object => {
       this.chartData.push(this.data.map(entry => entry[object.value]));
+      this.chartSeries.push(object.name);
     });
     if (!this.data.length) {
       this.chartData = [[0]];
@@ -77,7 +79,8 @@ export default class ResultsController {
             entry.parameterTestValues.map(
               ptv => ptv.parameter.name + ': ' + ptv.valueAsString
             )
-          ));
+          )
+        );
         this.update();
       });
   }

@@ -27,6 +27,11 @@ GET     /results                       controllers.ResultController.index()
 GET     /results/search/:featureSetId/:algorithmId controllers.ResultController.search(featureSetId: Integer, algorithmId: Integer)
 GET     /results/:resultSetId          controllers.ResultController.detail(resultSetId: Integer)
 
+# Profile
+GET     /profile                       controllers.ProfileController.index()
+POST    /profile/email                 controllers.ProfileController.changeEmail()
+POST    /profile/password              controllers.ProfileController.changePassword()
+
 # temp
 POST    /tests/answer                  controllers.TestController.testAnswer()
 

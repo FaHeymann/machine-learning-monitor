@@ -8,21 +8,17 @@ import play.data.format.Formats;
 
 import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import javax.persistence.Version;
 import java.util.Date;
 
 @MappedSuperclass
 public class TimestampedModel extends Model {
-    @Temporal(TemporalType.TIMESTAMP)
     @Formats.DateTime(pattern = "yyyy-MM-dd HH:mm:ss")
     @CreatedTimestamp
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     @Column(updatable = false)
     private Date createdAt;
 
-    @Temporal(TemporalType.TIMESTAMP)
     @Formats.DateTime(pattern = "yyyy-MM-dd HH:mm:ss")
     @UpdatedTimestamp
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")

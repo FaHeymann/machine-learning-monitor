@@ -8,6 +8,7 @@ create table algorithm (
   name                          varchar(255) not null,
   description                   varchar(255) not null,
   endpoint                      varchar(255) not null,
+  user_id                       integer not null,
   created_at                    datetime(6) not null,
   updated_at                    datetime(6) not null,
   constraint pk_algorithm primary key (id)
@@ -45,7 +46,7 @@ create table feature_set (
   id                            integer auto_increment not null,
   name                          varchar(255) not null,
   description                   varchar(255) not null,
-  user_id                       integer,
+  user_id                       integer not null,
   created_at                    datetime(6) not null,
   updated_at                    datetime(6) not null,
   constraint pk_feature_set primary key (id)
@@ -122,6 +123,9 @@ create table user (
   constraint pk_user primary key (id)
 );
 
+alter table algorithm add constraint fk_algorithm_user_id foreign key (user_id) references user (id) on delete restrict on update restrict;
+create index ix_algorithm_user_id on algorithm (user_id);
+
 alter table feature add constraint fk_feature_feature_set_id foreign key (feature_set_id) references feature_set (id) on delete restrict on update restrict;
 create index ix_feature_feature_set_id on feature (feature_set_id);
 
@@ -166,6 +170,9 @@ create index ix_result_set_test_matrix_id on result_set (test_matrix_id);
 
 
 # --- !Downs
+
+alter table algorithm drop foreign key fk_algorithm_user_id;
+drop index ix_algorithm_user_id on algorithm;
 
 alter table feature drop foreign key fk_feature_feature_set_id;
 drop index ix_feature_feature_set_id on feature;
