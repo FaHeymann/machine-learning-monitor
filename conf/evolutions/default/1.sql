@@ -9,8 +9,8 @@ create table algorithm (
   description                   varchar(255) not null,
   endpoint                      varchar(255) not null,
   user_id                       integer not null,
-  created_at                    timestamp not null,
-  updated_at                    timestamp not null,
+  created_at                    datetime(6) not null,
+  updated_at                    datetime(6) not null,
   constraint pk_algorithm primary key (id)
 );
 
@@ -18,8 +18,8 @@ create table feature (
   id                            integer auto_increment not null,
   result                        double not null,
   feature_set_id                integer not null,
-  created_at                    timestamp not null,
-  updated_at                    timestamp not null,
+  created_at                    datetime(6) not null,
+  updated_at                    datetime(6) not null,
   constraint pk_feature primary key (id)
 );
 
@@ -28,8 +28,8 @@ create table feature_entry (
   feature_id                    integer not null,
   feature_label_id              integer not null,
   value                         varchar(255) not null,
-  created_at                    timestamp not null,
-  updated_at                    timestamp not null,
+  created_at                    datetime(6) not null,
+  updated_at                    datetime(6) not null,
   constraint pk_feature_entry primary key (id)
 );
 
@@ -37,8 +37,8 @@ create table feature_label (
   id                            integer auto_increment not null,
   feature_set_id                integer not null,
   value                         varchar(255) not null,
-  created_at                    timestamp not null,
-  updated_at                    timestamp not null,
+  created_at                    datetime(6) not null,
+  updated_at                    datetime(6) not null,
   constraint pk_feature_label primary key (id)
 );
 
@@ -47,8 +47,8 @@ create table feature_set (
   name                          varchar(255) not null,
   description                   varchar(255) not null,
   user_id                       integer not null,
-  created_at                    timestamp not null,
-  updated_at                    timestamp not null,
+  created_at                    datetime(6) not null,
+  updated_at                    datetime(6) not null,
   constraint pk_feature_set primary key (id)
 );
 
@@ -57,8 +57,8 @@ create table parameter (
   name                          varchar(255) not null,
   type                          integer not null,
   algorithm_id                  integer not null,
-  created_at                    timestamp not null,
-  updated_at                    timestamp not null,
+  created_at                    datetime(6) not null,
+  updated_at                    datetime(6) not null,
   constraint ck_parameter_type check (type in (0,1,2,3)),
   constraint pk_parameter primary key (id)
 );
@@ -67,8 +67,8 @@ create table parameter_enum_value (
   id                            integer auto_increment not null,
   value                         varchar(255) not null,
   parameter_id                  integer not null,
-  created_at                    timestamp not null,
-  updated_at                    timestamp not null,
+  created_at                    datetime(6) not null,
+  updated_at                    datetime(6) not null,
   constraint pk_parameter_enum_value primary key (id)
 );
 
@@ -80,8 +80,8 @@ create table parameter_test_value (
   int_value                     integer,
   double_value                  double,
   enum_value_id                 integer,
-  created_at                    timestamp not null,
-  updated_at                    timestamp not null,
+  created_at                    datetime(6) not null,
+  updated_at                    datetime(6) not null,
   constraint pk_parameter_test_value primary key (id)
 );
 
@@ -90,8 +90,8 @@ create table result (
   expected                      double not null,
   actual                        double not null,
   result_set_id                 integer not null,
-  created_at                    timestamp not null,
-  updated_at                    timestamp not null,
+  created_at                    datetime(6) not null,
+  updated_at                    datetime(6) not null,
   constraint pk_result primary key (id)
 );
 
@@ -100,15 +100,15 @@ create table result_set (
   feature_set_id                integer not null,
   algorithm_id                  integer not null,
   test_matrix_id                integer,
-  created_at                    timestamp not null,
-  updated_at                    timestamp not null,
+  created_at                    datetime(6) not null,
+  updated_at                    datetime(6) not null,
   constraint pk_result_set primary key (id)
 );
 
 create table test_matrix (
   id                            integer auto_increment not null,
-  created_at                    timestamp not null,
-  updated_at                    timestamp not null,
+  created_at                    datetime(6) not null,
+  updated_at                    datetime(6) not null,
   constraint pk_test_matrix primary key (id)
 );
 
@@ -117,8 +117,8 @@ create table user (
   email                         varchar(255) not null,
   name                          varchar(255) not null,
   password                      varchar(255) not null,
-  created_at                    timestamp not null,
-  updated_at                    timestamp not null,
+  created_at                    datetime(6) not null,
+  updated_at                    datetime(6) not null,
   constraint uq_user_email unique (email),
   constraint pk_user primary key (id)
 );
@@ -171,50 +171,50 @@ create index ix_result_set_test_matrix_id on result_set (test_matrix_id);
 
 # --- !Downs
 
-alter table algorithm drop constraint if exists fk_algorithm_user_id;
-drop index if exists ix_algorithm_user_id;
+alter table algorithm drop foreign key fk_algorithm_user_id;
+drop index ix_algorithm_user_id on algorithm;
 
-alter table feature drop constraint if exists fk_feature_feature_set_id;
-drop index if exists ix_feature_feature_set_id;
+alter table feature drop foreign key fk_feature_feature_set_id;
+drop index ix_feature_feature_set_id on feature;
 
-alter table feature_entry drop constraint if exists fk_feature_entry_feature_id;
-drop index if exists ix_feature_entry_feature_id;
+alter table feature_entry drop foreign key fk_feature_entry_feature_id;
+drop index ix_feature_entry_feature_id on feature_entry;
 
-alter table feature_entry drop constraint if exists fk_feature_entry_feature_label_id;
-drop index if exists ix_feature_entry_feature_label_id;
+alter table feature_entry drop foreign key fk_feature_entry_feature_label_id;
+drop index ix_feature_entry_feature_label_id on feature_entry;
 
-alter table feature_label drop constraint if exists fk_feature_label_feature_set_id;
-drop index if exists ix_feature_label_feature_set_id;
+alter table feature_label drop foreign key fk_feature_label_feature_set_id;
+drop index ix_feature_label_feature_set_id on feature_label;
 
-alter table feature_set drop constraint if exists fk_feature_set_user_id;
-drop index if exists ix_feature_set_user_id;
+alter table feature_set drop foreign key fk_feature_set_user_id;
+drop index ix_feature_set_user_id on feature_set;
 
-alter table parameter drop constraint if exists fk_parameter_algorithm_id;
-drop index if exists ix_parameter_algorithm_id;
+alter table parameter drop foreign key fk_parameter_algorithm_id;
+drop index ix_parameter_algorithm_id on parameter;
 
-alter table parameter_enum_value drop constraint if exists fk_parameter_enum_value_parameter_id;
-drop index if exists ix_parameter_enum_value_parameter_id;
+alter table parameter_enum_value drop foreign key fk_parameter_enum_value_parameter_id;
+drop index ix_parameter_enum_value_parameter_id on parameter_enum_value;
 
-alter table parameter_test_value drop constraint if exists fk_parameter_test_value_result_set_id;
-drop index if exists ix_parameter_test_value_result_set_id;
+alter table parameter_test_value drop foreign key fk_parameter_test_value_result_set_id;
+drop index ix_parameter_test_value_result_set_id on parameter_test_value;
 
-alter table parameter_test_value drop constraint if exists fk_parameter_test_value_parameter_id;
-drop index if exists ix_parameter_test_value_parameter_id;
+alter table parameter_test_value drop foreign key fk_parameter_test_value_parameter_id;
+drop index ix_parameter_test_value_parameter_id on parameter_test_value;
 
-alter table parameter_test_value drop constraint if exists fk_parameter_test_value_enum_value_id;
-drop index if exists ix_parameter_test_value_enum_value_id;
+alter table parameter_test_value drop foreign key fk_parameter_test_value_enum_value_id;
+drop index ix_parameter_test_value_enum_value_id on parameter_test_value;
 
-alter table result drop constraint if exists fk_result_result_set_id;
-drop index if exists ix_result_result_set_id;
+alter table result drop foreign key fk_result_result_set_id;
+drop index ix_result_result_set_id on result;
 
-alter table result_set drop constraint if exists fk_result_set_feature_set_id;
-drop index if exists ix_result_set_feature_set_id;
+alter table result_set drop foreign key fk_result_set_feature_set_id;
+drop index ix_result_set_feature_set_id on result_set;
 
-alter table result_set drop constraint if exists fk_result_set_algorithm_id;
-drop index if exists ix_result_set_algorithm_id;
+alter table result_set drop foreign key fk_result_set_algorithm_id;
+drop index ix_result_set_algorithm_id on result_set;
 
-alter table result_set drop constraint if exists fk_result_set_test_matrix_id;
-drop index if exists ix_result_set_test_matrix_id;
+alter table result_set drop foreign key fk_result_set_test_matrix_id;
+drop index ix_result_set_test_matrix_id on result_set;
 
 drop table if exists algorithm;
 

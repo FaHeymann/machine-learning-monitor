@@ -15,14 +15,12 @@ import java.util.Date;
 
 @MappedSuperclass
 public class TimestampedModel extends Model {
-    @Temporal(TemporalType.TIMESTAMP)
     @Formats.DateTime(pattern = "yyyy-MM-dd HH:mm:ss")
     @CreatedTimestamp
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     @Column(updatable = false)
     private Date createdAt;
 
-    @Temporal(TemporalType.TIMESTAMP)
     @Formats.DateTime(pattern = "yyyy-MM-dd HH:mm:ss")
     @UpdatedTimestamp
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
