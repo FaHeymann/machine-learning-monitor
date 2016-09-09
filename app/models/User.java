@@ -33,6 +33,9 @@ public class User extends TimestampedModel {
     @OneToMany
     private List<FeatureSet> featureSets;
 
+    @OneToMany
+    private List<Algorithm> algorithms;
+
     public User(final String email, final String name, final String password) {
         this.setEmail(email);
         this.setName(name);
@@ -81,6 +84,14 @@ public class User extends TimestampedModel {
 
     public void setFeatureSets(final List<FeatureSet> featureSets) {
         this.featureSets = featureSets;
+    }
+
+    public List<Algorithm> getAlgorithms() {
+        return algorithms;
+    }
+
+    public void setAlgorithms(final List<Algorithm> algorithms) {
+        this.algorithms = algorithms;
     }
 
     public static User authenticate(final String email, final String password) {

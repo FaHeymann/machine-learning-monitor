@@ -3,6 +3,7 @@ package controllers;
 import com.google.inject.Inject;
 
 import models.FeatureSet;
+import models.User;
 import play.data.Form;
 import play.data.FormFactory;
 import play.mvc.Controller;
@@ -27,7 +28,8 @@ public class FeatureController extends Controller {
 
     @Security.Authenticated(Secured.class)
     public Result list() {
-        List<FeatureSet> featureSets = FeatureSet.find.all();
+        User user = User.find.where().eq("email", request().username()).findUnique();
+        List<FeatureSet> featureSets = FeatureSet.find.where().eq("user_id", user.getId()).findList();
 
         return ok(list.render(featureSets));
     }
@@ -39,7 +41,6 @@ public class FeatureController extends Controller {
 
     @Security.Authenticated(Secured.class)
     public Result save() {
-
         Form<FeatureSetData> featureSetForm = formFactory.form(FeatureSetData.class).bindFromRequest();
         if (featureSetForm.hasErrors()) {
             return badRequest(create.render(featureSetForm));
@@ -63,6 +64,7 @@ public class FeatureController extends Controller {
         FeatureSet featureSet = this.parser.getFeatureSet();
         featureSet.setName(featureSetForm.get().getName());
         featureSet.setDescription(featureSetForm.get().getDescription());
+        featureSet.setUser(User.find.where().eq("email", request().username()).findUnique());
 
         featureSet.save();
 
@@ -72,9 +74,12 @@ public class FeatureController extends Controller {
 
     @Security.Authenticated(Secured.class)
     public Result detail(final int featureSetId) {
+        User user = User.find.where().eq("email", request().username()).findUnique();
         FeatureSet featureSet = FeatureSet.find.byId(featureSetId);
 
-        return ok(detail.render(featureSet));
+        return user.getId().equals(featureSet.getUser().getId())
+            ? ok(detail.render(featureSet))
+            : notFound();
     }
 
     public static class FeatureSetData {

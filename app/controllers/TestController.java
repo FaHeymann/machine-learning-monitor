@@ -9,6 +9,7 @@ import models.Feature;
 import models.FeatureSet;
 import models.ParameterTestValue;
 import models.ResultSet;
+import models.User;
 import play.Logger;
 import play.data.Form;
 import play.data.FormFactory;
@@ -37,8 +38,9 @@ public class TestController extends Controller {
 
     @Security.Authenticated(Secured.class)
     public Result create() {
-        List<FeatureSet> featureSets = FeatureSet.find.all();
-        List<Algorithm> algorithms = Algorithm.find.all();
+        User user = User.find.where().eq("email", request().username()).findUnique();
+        List<FeatureSet> featureSets = FeatureSet.find.where().eq("user_id", user.getId()).findList();
+        List<Algorithm> algorithms = Algorithm.find.where().eq("user_id", user.getId()).findList();
 
         return ok(run.render(Json.toJson(featureSets).toString(), Json.toJson(algorithms).toString()));
     }

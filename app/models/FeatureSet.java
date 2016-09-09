@@ -42,6 +42,8 @@ public class FeatureSet extends TimestampedModel {
     private List<ResultSet> resultSets;
 
     @ManyToOne
+    @NotNull
+    @JsonIgnore
     private User user;
 
     public FeatureSet() {

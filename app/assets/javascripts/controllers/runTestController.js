@@ -7,14 +7,19 @@ export default class RunTestController {
     this.error = '';
     this.lastResultSetId = 0;
 
-    this.algorithmId = '' + this.algorithms[0].id;
-    this.featureSetId = '' + this.featureSets[0].id;
+    this.algorithmId = this.algorithms.length ? '' + this.algorithms[0].id : '';
+    this.featureSetId = this.featureSets.length ? '' + this.featureSets[0].id : '';
     this.initParameters();
     this.initLabels();
   }
 
   initParameters() {
     this.parameters = [];
+
+    if (!this.getCurrentAlgorithm()) {
+      return;
+    }
+
     this.getCurrentAlgorithm().parameters.forEach(
       p => this.parameters.push({
         id: p.id,
@@ -28,6 +33,11 @@ export default class RunTestController {
 
   initLabels() {
     this.labels = [];
+
+    if (!this.getCurrentFeatureSet()) {
+      return;
+    }
+
     this.getCurrentFeatureSet().labelStrings.forEach(
       l => this.labels.push({
         label: l,

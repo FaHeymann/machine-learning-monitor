@@ -9,6 +9,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
@@ -37,6 +38,11 @@ public class Algorithm extends TimestampedModel {
     @OneToMany(cascade = CascadeType.ALL)
     @JsonManagedReference
     private List<Parameter> parameters;
+
+    @ManyToOne
+    @NotNull
+    @JsonIgnore
+    private User user;
 
     public Algorithm() {
         this.parameters = new ArrayList<>();
@@ -89,6 +95,14 @@ public class Algorithm extends TimestampedModel {
 
     public void setParameters(final List<Parameter> parameters) {
         this.parameters = parameters;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(final User user) {
+        this.user = user;
     }
 
     @annotations.AllowPublic

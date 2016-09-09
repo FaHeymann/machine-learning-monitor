@@ -4,6 +4,7 @@ import com.google.inject.Inject;
 import models.Algorithm;
 import models.Parameter;
 import models.ParameterEnumValue;
+import models.User;
 import play.data.Form;
 import play.data.FormFactory;
 import play.mvc.BodyParser;
@@ -24,7 +25,8 @@ public class AlgorithmController extends Controller {
 
     @Security.Authenticated(Secured.class)
     public Result list() {
-        List<Algorithm> algorithms = Algorithm.find.all();
+        User user = User.find.where().eq("email", request().username()).findUnique();
+        List<Algorithm> algorithms = Algorithm.find.where().eq("user_id", user.getId()).findList();
 
         return ok(list.render(algorithms));
     }
@@ -37,7 +39,6 @@ public class AlgorithmController extends Controller {
     @Security.Authenticated(Secured.class)
     @BodyParser.Of(BodyParser.Json.class)
     public Result save() {
-
         Form<AlgorithmData> algorithmForm = formFactory.form(AlgorithmData.class).bindFromRequest();
 
         if (algorithmForm.hasErrors()) {
@@ -48,6 +49,7 @@ public class AlgorithmController extends Controller {
         algorithm.setName(algorithmForm.get().getName());
         algorithm.setDescription(algorithmForm.get().getDescription());
         algorithm.setEndpoint(algorithmForm.get().getEndpoint());
+        algorithm.setUser(User.find.where().eq("email", request().username()).findUnique());
 
         if (algorithmForm.get().getParameters() != null) {
             algorithm.setParameters(
@@ -76,9 +78,12 @@ public class AlgorithmController extends Controller {
 
     @Security.Authenticated(Secured.class)
     public Result detail(final int algorithmId) {
+        User user = User.find.where().eq("email", request().username()).findUnique();
         Algorithm algorithm = Algorithm.find.byId(algorithmId);
 
-        return ok(detail.render(algorithm));
+        return user.getId().equals(algorithm.getUser().getId())
+            ? ok(detail.render(algorithm))
+            : notFound();
     }
 
     public static class AlgorithmData {
