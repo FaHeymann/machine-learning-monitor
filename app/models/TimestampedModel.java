@@ -8,8 +8,6 @@ import play.data.format.Formats;
 
 import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import javax.persistence.Version;
 import java.util.Date;
 
