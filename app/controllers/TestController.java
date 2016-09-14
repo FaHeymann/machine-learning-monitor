@@ -18,6 +18,7 @@ import play.libs.ws.WSClient;
 import play.mvc.BodyParser;
 import play.mvc.Controller;
 import play.mvc.Result;
+import play.mvc.Results;
 import play.mvc.Security;
 import views.html.tests.run;
 
@@ -72,19 +73,36 @@ public class TestController extends Controller {
         ResultSet resultSet = new ResultSet();
         resultSet.setFeatureSet(featureSet);
         resultSet.setAlgorithm(algorithm);
-        resultSet.setParameterTestValues(
-            testForm.get().getParameters().stream()
-            .map(
-                p -> new ParameterTestValue(
-                    algorithm.getParameters().stream()
-                        .filter(d -> d.getId() == p.getId())
-                        .findFirst()
-                        .orElseThrow(AssertionError::new),
-                    p.getValue()
-                )
-            )
-            .collect(Collectors.toList())
-        );
+
+        if (testForm.get().getParameters() != null) {
+            resultSet.setParameterTestValues(
+                testForm.get().getParameters().stream()
+                    .map(
+                        p -> new ParameterTestValue(
+                            algorithm.getParameters().stream()
+                                .filter(d -> d.getId() == p.getId())
+                                .findFirst()
+                                .orElseThrow(AssertionError::new),
+                            p.getValue()
+                        )
+                    )
+                    .collect(Collectors.toList())
+            );
+        }
+
+        if (testForm.get().getExcludeLabels() != null) {
+            resultSet.setIgnoredLabels(
+                testForm.get().getExcludeLabels().stream()
+                    .map(
+                        el -> featureSet.getLabels().stream()
+                            .filter(l -> el.equals(l.getValue()))
+                            .findFirst()
+                            .orElse(null)
+                    )
+                    .collect(Collectors.toList())
+            );
+        }
+
 
         return ws.url(algorithm.getEndpoint()).post(wrapper).thenApply(wsResponse -> {
 

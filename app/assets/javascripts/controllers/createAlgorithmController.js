@@ -33,7 +33,7 @@ export default class CreateAlgorithmController {
       name: this.name,
       description: this.description,
       endpoint: this.endpoint,
-      parameters: this.parameters.map(parameter => {
+      parameters: this.parameters.map((parameter) => {
         const normalized = Object.assign({}, parameter);
         normalized.enumValues = parameter.enumValues.map(enumValue => enumValue.name);
         return normalized;
@@ -43,7 +43,7 @@ export default class CreateAlgorithmController {
     this.$http.post('/algorithms/create', body)
       .then(() => {
         this.$window.location.href = '/algorithms';
-      }, response => {
+      }, (response) => {
         try {
           this.error = response.data[''][0];
         } catch (e) {

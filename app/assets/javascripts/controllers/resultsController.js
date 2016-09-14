@@ -57,9 +57,9 @@ export default class ResultsController {
   assignMetrics(metrics) {
     this.chartData = [];
     this.chartSeries = [];
-    metrics.forEach(object => {
-      this.chartData.push(this.data.map(entry => entry[object.value]));
-      this.chartSeries.push(object.name);
+    metrics.forEach((metric) => {
+      this.chartData.push(this.data.map(entry => entry[metric.value]));
+      this.chartSeries.push(metric.name);
     });
     if (!this.data.length) {
       this.chartData = [[0]];
@@ -72,13 +72,15 @@ export default class ResultsController {
 
   fetch() {
     this.$http.get('/results/search/' + this.featureSetId + '/' + this.algorithmId)
-      .then(response => {
+      .then((response) => {
         this.data = response.data;
         this.chartLabels = this.data.map(entry =>
           [entry.createdAt].concat(
             entry.parameterTestValues.map(
               ptv => ptv.parameter.name + ': ' + ptv.valueAsString
             )
+          ).concat(
+            entry.ignoredLabelStrings.map(ils => 'ignored: ' + ils)
           )
         );
         this.update();

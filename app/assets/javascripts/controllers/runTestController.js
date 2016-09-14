@@ -23,7 +23,7 @@ export default class RunTestController {
     this.getCurrentAlgorithm().parameters.forEach(
       p => this.parameters.push({
         id: p.id,
-        value: p.type === 'ENUM' ? p.enumValues[0].value : '',
+        value: RunTestController.getParameterDefaultValue(p),
         type: p.type,
         name: p.name,
         enumValues: p.enumValues,
@@ -66,10 +66,10 @@ export default class RunTestController {
     };
 
     this.$http.post('/tests/run', body)
-      .then(response => {
+      .then((response) => {
         this.lastResultSetId = response.data.id;
         this.status = 'initial';
-      }, response => {
+      }, (response) => {
         try {
           this.error = response.data[''][0];
         } catch (e) {
@@ -77,5 +77,13 @@ export default class RunTestController {
         }
         this.status = 'initial';
       });
+  }
+
+  static getParameterDefaultValue(parameter) {
+    switch (parameter.type) {
+      case 'ENUM': return parameter.enumValues[0].value;
+      case 'INT': case 'DOUBLE': return '0';
+      default: return '';
+    }
   }
 }
