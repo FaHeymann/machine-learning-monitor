@@ -18,7 +18,6 @@ import play.libs.ws.WSClient;
 import play.mvc.BodyParser;
 import play.mvc.Controller;
 import play.mvc.Result;
-import play.mvc.Results;
 import play.mvc.Security;
 import views.html.tests.run;
 
