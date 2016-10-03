@@ -105,6 +105,12 @@ create table result_set (
   constraint pk_result_set primary key (id)
 );
 
+create table test_ignored_labels (
+  result_set_id                 integer not null,
+  feature_label_id              integer not null,
+  constraint pk_test_ignored_labels primary key (result_set_id,feature_label_id)
+);
+
 create table test_matrix (
   id                            integer auto_increment not null,
   created_at                    datetime(6) not null,
@@ -168,6 +174,12 @@ create index ix_result_set_algorithm_id on result_set (algorithm_id);
 alter table result_set add constraint fk_result_set_test_matrix_id foreign key (test_matrix_id) references test_matrix (id) on delete restrict on update restrict;
 create index ix_result_set_test_matrix_id on result_set (test_matrix_id);
 
+alter table test_ignored_labels add constraint fk_test_ignored_labels_result_set foreign key (result_set_id) references result_set (id) on delete restrict on update restrict;
+create index ix_test_ignored_labels_result_set on test_ignored_labels (result_set_id);
+
+alter table test_ignored_labels add constraint fk_test_ignored_labels_feature_label foreign key (feature_label_id) references feature_label (id) on delete restrict on update restrict;
+create index ix_test_ignored_labels_feature_label on test_ignored_labels (feature_label_id);
+
 
 # --- !Downs
 
@@ -216,6 +228,12 @@ drop index ix_result_set_algorithm_id on result_set;
 alter table result_set drop foreign key fk_result_set_test_matrix_id;
 drop index ix_result_set_test_matrix_id on result_set;
 
+alter table test_ignored_labels drop foreign key fk_test_ignored_labels_result_set;
+drop index ix_test_ignored_labels_result_set on test_ignored_labels;
+
+alter table test_ignored_labels drop foreign key fk_test_ignored_labels_feature_label;
+drop index ix_test_ignored_labels_feature_label on test_ignored_labels;
+
 drop table if exists algorithm;
 
 drop table if exists feature;
@@ -235,6 +253,8 @@ drop table if exists parameter_test_value;
 drop table if exists result;
 
 drop table if exists result_set;
+
+drop table if exists test_ignored_labels;
 
 drop table if exists test_matrix;
 

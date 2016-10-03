@@ -2,6 +2,7 @@ package models;
 
 import com.avaje.ebean.Model;
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.CascadeType;
@@ -9,10 +10,13 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.NotNull;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Entity
 public class ResultSet extends TimestampedModel {
@@ -38,6 +42,11 @@ public class ResultSet extends TimestampedModel {
     @OneToMany(cascade = CascadeType.ALL)
     @JsonManagedReference
     private List<ParameterTestValue> parameterTestValues;
+
+    @ManyToMany
+    @JoinTable(name = "test_ignored_labels")
+    @JsonIgnore
+    private List<FeatureLabel> ignoredLabels;
 
     @OneToMany(cascade = CascadeType.ALL)
     @JsonManagedReference
@@ -81,6 +90,20 @@ public class ResultSet extends TimestampedModel {
 
     public void setParameterTestValues(final List<ParameterTestValue> parameterTestValues) {
         this.parameterTestValues = parameterTestValues;
+    }
+
+    public List<FeatureLabel> getIgnoredLabels() {
+        return ignoredLabels;
+    }
+
+    public List<String> getIgnoredLabelStrings() {
+        return this.getIgnoredLabels().stream()
+            .map(FeatureLabel::getValue)
+            .collect(Collectors.toList());
+    }
+
+    public void setIgnoredLabels(final List<FeatureLabel> ignoredLabels) {
+        this.ignoredLabels = ignoredLabels;
     }
 
     public List<Result> getResults() {

@@ -1,10 +1,10 @@
 module.exports = {
-  extends: 'airbnb/base',
+  extends: 'airbnb-base',
   rules: {
+    "comma-dangle": 'error',
     'prefer-template': 'off',
     'consistent-return': 'error',
     'no-case-declarations': 'off',
-    'arrow-parens': ['error', 'as-needed'],
-    'arrow-body-style': ['error', 'as-needed', { requireReturnForObjectLiteral: true }],
+    'no-plusplus': ['error', { 'allowForLoopAfterthoughts': true }],
   },
 };

@@ -47,19 +47,19 @@ export default class ResultsController {
     if (!points.length) {
       return;
     }
+    // eslint-disable-next-line no-underscore-dangle
+    const date = points[0]._xScale.ticks[points[0]._index][0];
+    const dataEntry = this.$parent.$ctrl.data.find(entry => entry.createdAt === date);
 
-    const date = points[0].label;
-    const dataEntry = this.data.find(entry => entry.createdAt === date);
-
-    this.$window.location.href = '/results/' + dataEntry.id;
+    this.$parent.$ctrl.$window.location.href = '/results/' + dataEntry.id;
   }
 
   assignMetrics(metrics) {
     this.chartData = [];
     this.chartSeries = [];
-    metrics.forEach(object => {
-      this.chartData.push(this.data.map(entry => entry[object.value]));
-      this.chartSeries.push(object.name);
+    metrics.forEach((metric) => {
+      this.chartData.push(this.data.map(entry => entry[metric.value]));
+      this.chartSeries.push(metric.name);
     });
     if (!this.data.length) {
       this.chartData = [[0]];
@@ -72,13 +72,15 @@ export default class ResultsController {
 
   fetch() {
     this.$http.get('/results/search/' + this.featureSetId + '/' + this.algorithmId)
-      .then(response => {
+      .then((response) => {
         this.data = response.data;
         this.chartLabels = this.data.map(entry =>
           [entry.createdAt].concat(
             entry.parameterTestValues.map(
               ptv => ptv.parameter.name + ': ' + ptv.valueAsString
             )
+          ).concat(
+            entry.ignoredLabelStrings.map(ils => 'ignored: ' + ils)
           )
         );
         this.update();
