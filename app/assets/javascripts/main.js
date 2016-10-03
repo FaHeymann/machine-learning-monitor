@@ -2,6 +2,7 @@ import ResultsController from './controllers/resultsController';
 import CreateAlgorithmController from './controllers/createAlgorithmController';
 import CreateAlgorithmEnumController from './controllers/createAlgorithmEnumController';
 import RunTestController from './controllers/runTestController';
+import RunMatrixTestController from './controllers/runMatrixTestController';
 
 // eslint-disable-next-line no-undef
 angular.module('machine-learning-monitor', ['chart.js', 'ui.bootstrap', 'ui.multiselect'])
@@ -18,6 +19,15 @@ angular.module('machine-learning-monitor', ['chart.js', 'ui.bootstrap', 'ui.mult
 .component('runTest', {
   controller: RunTestController,
   templateUrl: '/assets/templates/runTest.html',
+  bindings: {
+    featureSets: '<',
+    algorithms: '<',
+  },
+})
+
+.component('runMatrixTest', {
+  controller: RunMatrixTestController,
+  templateUrl: '/assets/templates/runMatrixTest.html',
   bindings: {
     featureSets: '<',
     algorithms: '<',

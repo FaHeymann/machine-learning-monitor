@@ -21,6 +21,7 @@ POST    /algorithms/create             controllers.AlgorithmController.save()
 # Tests
 GET     /tests/run                     controllers.TestController.create()
 POST    /tests/run                     controllers.TestController.run()
+GET     /tests/matrix                  controllers.TestController.createMatrix()
 
 # Results
 GET     /results                       controllers.ResultController.index()

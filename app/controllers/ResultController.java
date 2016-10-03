@@ -16,6 +16,8 @@ import java.util.List;
 
 public class ResultController extends Controller {
 
+    private static final int MAX_RESULT_ENTRIES = 30;
+
     @Security.Authenticated(Secured.class)
     public Result index() {
         User user = User.find.where().eq("email", request().username()).findUnique();
@@ -41,7 +43,7 @@ public class ResultController extends Controller {
         List<ResultSet> resultSets = ResultSet.find.where().and(
             Expr.eq("feature_set_id", featureSetId),
             Expr.eq("algorithm_id", algorithmId)
-        ).findList();
+        ).setMaxRows(MAX_RESULT_ENTRIES).findList();
         return ok(Json.toJson(resultSets));
     }
 

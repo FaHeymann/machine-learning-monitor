@@ -19,6 +19,7 @@ import play.mvc.BodyParser;
 import play.mvc.Controller;
 import play.mvc.Result;
 import play.mvc.Security;
+import views.html.tests.matrix;
 import views.html.tests.run;
 
 import java.util.ArrayList;
@@ -43,6 +44,15 @@ public class TestController extends Controller {
         List<Algorithm> algorithms = Algorithm.find.where().eq("user_id", user.getId()).findList();
 
         return ok(run.render(Json.toJson(featureSets).toString(), Json.toJson(algorithms).toString()));
+    }
+
+    @Security.Authenticated(Secured.class)
+    public Result createMatrix() {
+        User user = User.find.where().eq("email", request().username()).findUnique();
+        List<FeatureSet> featureSets = FeatureSet.find.where().eq("user_id", user.getId()).findList();
+        List<Algorithm> algorithms = Algorithm.find.where().eq("user_id", user.getId()).findList();
+
+        return ok(matrix.render(Json.toJson(featureSets).toString(), Json.toJson(algorithms).toString()));
     }
 
     @Security.Authenticated(Secured.class)

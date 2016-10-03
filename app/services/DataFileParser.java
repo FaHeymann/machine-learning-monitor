@@ -90,7 +90,7 @@ public class DataFileParser {
     }
 
     public String getError() {
-        return error;
+        return this.error;
     }
 
     public boolean hasError() {

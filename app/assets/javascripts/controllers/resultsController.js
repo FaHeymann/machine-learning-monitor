@@ -47,11 +47,11 @@ export default class ResultsController {
     if (!points.length) {
       return;
     }
+    // eslint-disable-next-line no-underscore-dangle
+    const date = points[0]._xScale.ticks[points[0]._index][0];
+    const dataEntry = this.$parent.$ctrl.data.find(entry => entry.createdAt === date);
 
-    const date = points[0].label;
-    const dataEntry = this.data.find(entry => entry.createdAt === date);
-
-    this.$window.location.href = '/results/' + dataEntry.id;
+    this.$parent.$ctrl.$window.location.href = '/results/' + dataEntry.id;
   }
 
   assignMetrics(metrics) {
