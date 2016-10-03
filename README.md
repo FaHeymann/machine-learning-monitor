@@ -95,9 +95,9 @@ To use this tool with one of your algorithms your algorithm must provide a reach
 ```
 
 * The `allLabels` and `features` arrays will contain the featureSet data specified for the test.
-* The `parameters object will contain all parameters specified for the algorithm (when creating it) in the form `parameter.name: parameter.value` where the value is specified for each test you run.
+* The `parameters` object will contain all parameters specified for the algorithm (when creating it) in the form `parameter.name: parameter.value` where the value is specified for each test you run.
 * The `excludeLabels` array will contain the names of the labels to be ignored in the test.
-
+``
 Your algorithm is then expected to return a json response of the following form:
 
 ```json
