@@ -104,8 +104,12 @@ public class TestController extends Controller {
 
 
         return ws.url(algorithm.getEndpoint()).post(wrapper).thenApply(wsResponse -> {
-
-            JsonNode response = wsResponse.asJson();
+            JsonNode response;
+            try {
+                response = wsResponse.asJson();
+            } catch (Exception e) {
+                return badRequest("Invalid response");
+            }
 
             if (!response.isArray()) {
                 return badRequest("Invalid answer format");
@@ -138,7 +142,7 @@ public class TestController extends Controller {
     }
 
     private ObjectNode assembleRequestBody(final Form<TestData> testForm, final FeatureSet featureSet) {
-        JsonNode labels = Json.toJson(featureSet.getLabels());
+        JsonNode labels = Json.toJson(featureSet.getLabelStrings());
         ArrayNode features = Json.newArray();
         for (Feature feature : featureSet.getFeatures()) {
             ObjectNode featureNode = Json.newObject();
@@ -161,7 +165,12 @@ public class TestController extends Controller {
                 ? Json.newObject()
                 : Json.toJson(
                 testForm.get().getParameters().stream()
-                    .collect(Collectors.toMap(Parameter::getName, Parameter::getValue))
+                    .collect(Collectors.toMap(
+                        Parameter::getName,
+                        x -> x.getType().equals("INT") || x.getType().equals("DOUBLE")
+                            ? Double.parseDouble(x.getValue())
+                            : x.getValue())
+                    )
             )
         );
 
