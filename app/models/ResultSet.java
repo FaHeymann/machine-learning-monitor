@@ -146,12 +146,12 @@ public class ResultSet extends TimestampedModel {
     }
 
     public double get90Quantile() {
-        final double ninetyPercent = 0.25;
+        final double ninetyPercent = 0.90;
         return this.getQuantile(ninetyPercent);
     }
 
     public double get99Quantile() {
-        final double ninetyNinePercent = 0.25;
+        final double ninetyNinePercent = 0.99;
         return this.getQuantile(ninetyNinePercent);
     }
 
